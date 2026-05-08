@@ -23,12 +23,12 @@ export function TemplateGallery({ value, onChange }: Props) {
               active ? "border-brand shadow-elegant" : "border-border hover:border-brand/50"
             )}
           >
-            <div className="aspect-[3/4] overflow-hidden bg-neutral-100 relative">
+            <div className="aspect-[4/5] overflow-hidden bg-neutral-100 relative">
               <div
                 className="absolute top-0 left-1/2"
                 style={{
                   width: "794px",
-                  transform: "translateX(-50%) scale(0.32)",
+                  transform: "translateX(-50%) scale(0.26)",
                   transformOrigin: "top center",
                   pointerEvents: "none",
                 }}
