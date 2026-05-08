@@ -18,12 +18,12 @@ export function TemplateGallery({ value, onChange }: Props) {
             key={t.id}
             onClick={() => onChange(t.id)}
             className={cn(
-              "group relative rounded-xl border-2 overflow-hidden text-left transition-all bg-white",
+              "group relative rounded-xl border-2 overflow-hidden text-left transition-all bg-[#ffffff]",
               "hover:-translate-y-1 hover:shadow-elegant",
               active ? "border-brand shadow-elegant" : "border-border hover:border-brand"
             )}
           >
-            <div className="aspect-[3/4] overflow-hidden bg-neutral-100 relative">
+            <div className="aspect-[3/4] overflow-hidden bg-[#f5f5f5] relative">
               <div
                 className="absolute top-0 left-1/2"
                 style={{
@@ -37,7 +37,7 @@ export function TemplateGallery({ value, onChange }: Props) {
               </div>
               <div className="absolute inset-0 ring-1 ring-inset ring-[#111111] group-hover:ring-brand transition" />
             </div>
-            <div className="p-3 flex items-center justify-between bg-white border-t">
+            <div className="p-3 flex items-center justify-between bg-[#ffffff] border-t">
               <div>
                 <div className="font-semibold text-sm">{t.name}</div>
                 <div className="text-[11px] text-muted-foreground">{t.desc}</div>
