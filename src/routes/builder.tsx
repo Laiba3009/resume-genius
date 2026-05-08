@@ -69,51 +69,61 @@ function Builder() {
     if (!previewRef.current) return;
     toast.loading("Generating PDF…", { id: "pdf" });
     try {
-      const unsafeColorFns = ["ok" + "lch", "la" + "b", "color" + "-" + "mix"];
-      const unsafeColorPattern = new RegExp(`(?:${unsafeColorFns.join("|")})\\([^;{}]+\\)`, "i");
-      const unsafeColorPatternGlobal = new RegExp(`(?:${unsafeColorFns.join("|")})\\([^;{}]+\\)`, "gi");
-      const isSafePaint = (value: string) =>
-        !unsafeColorPattern.test(value) && !value.includes("var(") && !value.startsWith("color(");
-      const safePaint = (value: string, fallback: string) => {
-        return value && isSafePaint(value) ? value : fallback;
+      // --- oklch -> rgb conversion (html2canvas can't parse oklch) ---
+      const oklchToRgb = (L: number, C: number, h: number, alpha = 1) => {
+        const hr = (h * Math.PI) / 180;
+        const a = Math.cos(hr) * C;
+        const b = Math.sin(hr) * C;
+        const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+        const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+        const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+        const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+        let r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+        let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+        let bl = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
+        const toSrgb = (v: number) => {
+          v = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+          return Math.max(0, Math.min(255, Math.round(v * 255)));
+        };
+        return `rgba(${toSrgb(r)}, ${toSrgb(g)}, ${toSrgb(bl)}, ${alpha})`;
       };
+      const replaceOklch = (str: string) =>
+        str.replace(/oklch\(\s*([0-9.%]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.%]+))?\s*\)/gi,
+          (_m, L, C, h, A) => {
+            const Ln = L.endsWith("%") ? parseFloat(L) / 100 : parseFloat(L);
+            const An = A ? (A.endsWith("%") ? parseFloat(A) / 100 : parseFloat(A)) : 1;
+            return oklchToRgb(Ln, parseFloat(C), parseFloat(h), An);
+          });
 
       const canvas = await html2canvas(previewRef.current, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
-        logging: false,
-        windowWidth: previewRef.current.scrollWidth,
-        windowHeight: previewRef.current.scrollHeight,
-        onclone: (doc, clonedElement) => {
-          doc.querySelectorAll("style").forEach((styleTag) => {
-            styleTag.textContent = styleTag.textContent?.replace(unsafeColorPatternGlobal, "#000000") ?? "";
+        onclone: (doc) => {
+          // 1) Sanitize all <style> tags
+          doc.querySelectorAll("style").forEach((s) => {
+            if (s.textContent && s.textContent.includes("oklch")) {
+              s.textContent = replaceOklch(s.textContent);
+            }
           });
-
-          const colorProps: Array<[string, string]> = [
-            ["color", "#111827"],
-            ["background-color", "transparent"],
-            ["border-top-color", "#e5e7eb"],
-            ["border-right-color", "#e5e7eb"],
-            ["border-bottom-color", "#e5e7eb"],
-            ["border-left-color", "#e5e7eb"],
-            ["outline-color", "#111827"],
-            ["text-decoration-color", "#111827"],
-            ["caret-color", "#111827"],
-            ["fill", "#111827"],
-            ["stroke", "none"],
+          // 2) Sanitize inline styles on every element
+          const props = [
+            "color","background-color","border-top-color","border-right-color",
+            "border-bottom-color","border-left-color","outline-color","fill","stroke",
+            "text-decoration-color","caret-color","column-rule-color","background-image",
           ];
-
-          [clonedElement, ...clonedElement.querySelectorAll<HTMLElement>("*")].forEach((el) => {
+          doc.querySelectorAll<HTMLElement>("*").forEach((el) => {
             const cs = doc.defaultView!.getComputedStyle(el);
-            colorProps.forEach(([prop, fallback]) => {
-              const value = cs.getPropertyValue(prop);
-              el.style.setProperty(prop, safePaint(value, fallback));
+            props.forEach((p) => {
+              const v = cs.getPropertyValue(p);
+              if (v && v.includes("oklch")) {
+                el.style.setProperty(p, replaceOklch(v));
+              }
             });
-            el.style.backgroundImage = safePaint(cs.backgroundImage, "none");
-            el.style.boxShadow = safePaint(cs.boxShadow, "none");
+            if (el.getAttribute("style")?.includes("oklch")) {
+              el.setAttribute("style", replaceOklch(el.getAttribute("style")!));
+            }
           });
-          clonedElement.style.backgroundColor = "#ffffff";
         },
       });
       const img = canvas.toDataURL("image/png");
@@ -141,7 +151,7 @@ function Builder() {
 
   return (
     <div className="min-h-screen bg-gradient-soft">
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background border-b border-border no-print">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50 no-print">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2 font-display font-bold">
             <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
@@ -151,14 +161,14 @@ function Builder() {
           </Link>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm"><Link to="/"><ArrowLeft className="size-4 mr-1" /> Home</Link></Button>
-            <Button onClick={downloadPDF} className="bg-gradient-brand text-brand-foreground">
+            <Button onClick={downloadPDF} className="bg-gradient-brand text-brand-foreground hover:opacity-90">
               <Download className="size-4 mr-2" /> Download PDF
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-10 xl:gap-12">
+      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
         {/* Left: form / templates */}
         <div className="space-y-4 no-print">
           <Tabs defaultValue="content">
@@ -176,8 +186,8 @@ function Builder() {
         </div>
 
         {/* Right: preview */}
-        <div className="bg-muted rounded-2xl p-6 sm:p-8 overflow-auto flex justify-center items-start">
-          <div className="w-full max-w-5xl flex justify-center items-start">
+        <div className="bg-muted/40 rounded-2xl p-4 sm:p-8 overflow-auto">
+          <div className="origin-top mx-auto" style={{ transform: "scale(var(--preview-scale, 0.85))", transformOrigin: "top center" }}>
             <ResumePreview ref={previewRef} data={data} template={template} />
           </div>
         </div>

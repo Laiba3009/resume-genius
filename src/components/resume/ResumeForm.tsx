@@ -103,7 +103,7 @@ export function ResumeForm({ data, onChange }: Props) {
           </Button>
         </div>
         {data.experience.map((exp, i) => (
-          <div key={exp.id} className="border rounded-lg p-3 space-y-2 bg-muted">
+          <div key={exp.id} className="border rounded-lg p-3 space-y-2 bg-muted/30">
             <div className="grid grid-cols-2 gap-2">
               <Field label="Role" value={exp.role} onChange={(v) => {
                 const next = [...data.experience]; next[i] = { ...exp, role: v }; update("experience", next);
@@ -138,7 +138,7 @@ export function ResumeForm({ data, onChange }: Props) {
           </Button>
         </div>
         {data.education.map((ed, i) => (
-          <div key={ed.id} className="border rounded-lg p-3 space-y-2 bg-muted">
+          <div key={ed.id} className="border rounded-lg p-3 space-y-2 bg-muted/30">
             <div className="grid grid-cols-2 gap-2">
               <Field label="Degree" value={ed.degree} onChange={(v) => { const n = [...data.education]; n[i] = { ...ed, degree: v }; update("education", n); }} />
               <Field label="School" value={ed.school} onChange={(v) => { const n = [...data.education]; n[i] = { ...ed, school: v }; update("education", n); }} />

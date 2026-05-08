@@ -12,8 +12,8 @@ export const ResumePreview = forwardRef<HTMLDivElement, Props>(({ data, template
     <div
       ref={ref}
       id="resume-canvas"
-      className="bg-[#ffffff] text-[#171717] mx-auto shadow-card"
-      style={{ width: "900px", minHeight: "1273px" }}
+      className="bg-white text-neutral-900 mx-auto shadow-card"
+      style={{ width: "794px", minHeight: "1123px" }}
     >
       {template === "modern" && <ModernTpl d={data} />}
       {template === "minimal" && <MinimalTpl d={data} />}
@@ -33,10 +33,10 @@ ResumePreview.displayName = "ResumePreview";
 function Avatar({ src, size = 80 }: { src?: string; size?: number }) {
   return (
     <div
-      className="rounded-full bg-[#e5e5e5] overflow-hidden flex items-center justify-center shrink-0"
+      className="rounded-full bg-neutral-200 overflow-hidden flex items-center justify-center shrink-0"
       style={{ width: size, height: size }}
     >
-      {src ? <img src={src} className="w-full h-full object-cover" /> : <User className="text-[#a3a3a3]" />}
+      {src ? <img src={src} className="w-full h-full object-cover" /> : <User className="text-neutral-400" />}
     </div>
   );
 }
@@ -53,11 +53,11 @@ const Section = ({ title, children, color = "#111" }: any) => (
 function ModernTpl({ d }: { d: ResumeData }) {
   return (
     <div className="grid grid-cols-[1fr_2fr] h-full" style={{ fontFamily: "Inter, sans-serif" }}>
-      <aside className="bg-[#171717] text-[#ffffff] p-8 space-y-6">
+      <aside className="bg-neutral-900 text-white p-8 space-y-6">
         <Avatar src={d.photo} size={96} />
         <div>
           <h1 className="text-2xl font-bold leading-tight">{d.fullName}</h1>
-          <p className="text-[#d4d4d4] text-sm mt-1">{d.title}</p>
+          <p className="text-neutral-300 text-sm mt-1">{d.title}</p>
         </div>
         <div className="space-y-2 text-xs">
           {d.email && <div className="flex items-center gap-2"><Mail className="size-3" /> {d.email}</div>}
@@ -66,7 +66,7 @@ function ModernTpl({ d }: { d: ResumeData }) {
         </div>
         <Section title="Skills" color="#fff">
           <div className="flex flex-wrap gap-1.5">
-            {d.skills.map((s) => <span key={s} className="text-[10px] bg-[#ffffff] px-2 py-1 rounded">{s}</span>)}
+            {d.skills.map((s) => <span key={s} className="text-[10px] bg-white/10 px-2 py-1 rounded">{s}</span>)}
           </div>
         </Section>
       </aside>
@@ -74,13 +74,13 @@ function ModernTpl({ d }: { d: ResumeData }) {
         <Section title="Profile"><p>{d.objective}</p></Section>
         <Section title="Experience">{d.experience.map(e => (
           <div key={e.id} className="mb-3">
-            <div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-[#737373]">{e.period}</span></div>
-            <div className="text-xs text-[#525252] italic">{e.company}</div>
+            <div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-neutral-500">{e.period}</span></div>
+            <div className="text-xs text-neutral-600 italic">{e.company}</div>
             <p className="text-xs mt-1">{e.description}</p>
           </div>
         ))}</Section>
         <Section title="Education">{d.education.map(e => (
-          <div key={e.id} className="mb-2"><div className="flex justify-between"><strong>{e.degree}</strong><span className="text-xs text-[#737373]">{e.period}</span></div><div className="text-xs text-[#525252]">{e.school}</div></div>
+          <div key={e.id} className="mb-2"><div className="flex justify-between"><strong>{e.degree}</strong><span className="text-xs text-neutral-500">{e.period}</span></div><div className="text-xs text-neutral-600">{e.school}</div></div>
         ))}</Section>
       </main>
     </div>
@@ -92,13 +92,13 @@ function MinimalTpl({ d }: { d: ResumeData }) {
     <div className="p-12" style={{ fontFamily: "Inter, sans-serif" }}>
       <div className="text-center mb-8">
         <h1 className="text-4xl font-light tracking-tight">{d.fullName}</h1>
-        <p className="text-sm text-[#737373] mt-2 tracking-widest uppercase">{d.title}</p>
-        <div className="text-xs text-[#737373] mt-3 flex justify-center gap-4">
+        <p className="text-sm text-neutral-500 mt-2 tracking-widest uppercase">{d.title}</p>
+        <div className="text-xs text-neutral-500 mt-3 flex justify-center gap-4">
           {d.email && <span>{d.email}</span>}{d.phone && <span>· {d.phone}</span>}{d.address && <span>· {d.address}</span>}
         </div>
       </div>
       <div className="text-[13px] leading-relaxed space-y-5">
-        <p className="text-center italic max-w-xl mx-auto text-[#525252]">{d.objective}</p>
+        <p className="text-center italic max-w-xl mx-auto text-neutral-600">{d.objective}</p>
         <Section title="Experience">{d.experience.map(e => (
           <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role} — {e.company}</strong><span className="text-xs">{e.period}</span></div><p className="text-xs mt-1">{e.description}</p></div>
         ))}</Section>
@@ -112,7 +112,7 @@ function MinimalTpl({ d }: { d: ResumeData }) {
 function CreativeTpl({ d }: { d: ResumeData }) {
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="p-10 text-[#ffffff]" style={{ background: "linear-gradient(135deg,#7c3aed,#ec4899)" }}>
+      <div className="p-10 text-white" style={{ background: "linear-gradient(135deg,#7c3aed,#ec4899)" }}>
         <div className="flex items-center gap-5">
           <Avatar src={d.photo} size={88} />
           <div>
@@ -125,10 +125,10 @@ function CreativeTpl({ d }: { d: ResumeData }) {
       <div className="p-10 text-[13px] leading-relaxed">
         <Section title="About" color="#7c3aed"><p>{d.objective}</p></Section>
         <Section title="Experience" color="#7c3aed">{d.experience.map(e => (
-          <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-[#db2777]">{e.period}</span></div><div className="text-xs italic">{e.company}</div><p className="text-xs mt-1">{e.description}</p></div>
+          <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-pink-600">{e.period}</span></div><div className="text-xs italic">{e.company}</div><p className="text-xs mt-1">{e.description}</p></div>
         ))}</Section>
         <Section title="Skills" color="#7c3aed"><div className="flex flex-wrap gap-1.5">{d.skills.map(s => <span key={s} className="text-[10px] px-2 py-1 rounded-full" style={{ background: "linear-gradient(135deg,#7c3aed22,#ec489922)", color: "#7c3aed" }}>{s}</span>)}</div></Section>
-        <Section title="Education" color="#7c3aed">{d.education.map(e => <div key={e.id} className="text-xs mb-1"><strong>{e.degree}</strong> — {e.school} <span className="text-[#737373]">({e.period})</span></div>)}</Section>
+        <Section title="Education" color="#7c3aed">{d.education.map(e => <div key={e.id} className="text-xs mb-1"><strong>{e.degree}</strong> — {e.school} <span className="text-neutral-500">({e.period})</span></div>)}</Section>
       </div>
     </div>
   );
@@ -137,9 +137,9 @@ function CreativeTpl({ d }: { d: ResumeData }) {
 function CorporateTpl({ d }: { d: ResumeData }) {
   return (
     <div className="p-10" style={{ fontFamily: "Georgia, serif" }}>
-      <div className="border-b-2 border-[#171717] pb-4 mb-6">
+      <div className="border-b-2 border-neutral-900 pb-4 mb-6">
         <h1 className="text-3xl font-bold">{d.fullName}</h1>
-        <p className="text-sm text-[#404040]">{d.title}</p>
+        <p className="text-sm text-neutral-700">{d.title}</p>
         <div className="text-xs mt-2">{[d.email, d.phone, d.address].filter(Boolean).join("  |  ")}</div>
       </div>
       <div className="text-[13px] leading-relaxed">
@@ -174,13 +174,13 @@ function AtsTpl({ d }: { d: ResumeData }) {
 function ElegantTpl({ d }: { d: ResumeData }) {
   return (
     <div className="p-12" style={{ fontFamily: "Georgia, serif" }}>
-      <div className="text-center mb-8 border-b border-[#d4d4d4] pb-6">
+      <div className="text-center mb-8 border-b border-neutral-300 pb-6">
         <h1 className="text-5xl font-normal italic">{d.fullName}</h1>
-        <p className="text-sm tracking-[0.3em] uppercase mt-3 text-[#737373]">{d.title}</p>
-        <p className="text-xs mt-2 text-[#525252]">{[d.email, d.phone, d.address].filter(Boolean).join(" · ")}</p>
+        <p className="text-sm tracking-[0.3em] uppercase mt-3 text-neutral-500">{d.title}</p>
+        <p className="text-xs mt-2 text-neutral-600">{[d.email, d.phone, d.address].filter(Boolean).join(" · ")}</p>
       </div>
       <div className="text-[13px] leading-relaxed space-y-5">
-        <p className="italic text-center text-[#404040]">{d.objective}</p>
+        <p className="italic text-center text-neutral-700">{d.objective}</p>
         <Section title="Experience">{d.experience.map(e => <div key={e.id} className="mb-3 text-center"><div className="font-bold">{e.role}</div><div className="text-xs italic">{e.company} · {e.period}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
         <Section title="Education">{d.education.map(e => <div key={e.id} className="text-xs text-center mb-1"><strong>{e.degree}</strong> — {e.school} · {e.period}</div>)}</Section>
         <Section title="Skills"><p className="text-xs text-center">{d.skills.join(" · ")}</p></Section>
@@ -192,7 +192,7 @@ function ElegantTpl({ d }: { d: ResumeData }) {
 function SidebarTpl({ d }: { d: ResumeData }) {
   return (
     <div className="grid grid-cols-[260px_1fr] h-full" style={{ fontFamily: "Inter, sans-serif" }}>
-      <aside className="p-7 text-[#ffffff] space-y-5" style={{ background: "#1f2937" }}>
+      <aside className="p-7 text-white space-y-5" style={{ background: "#1f2937" }}>
         <Avatar src={d.photo} size={110} />
         <div><h1 className="text-xl font-bold">{d.fullName}</h1><p className="text-xs opacity-80">{d.title}</p></div>
         <Section title="Contact" color="#fff">
@@ -215,7 +215,7 @@ function SidebarTpl({ d }: { d: ResumeData }) {
 function CompactTpl({ d }: { d: ResumeData }) {
   return (
     <div className="p-8 text-[12px] leading-snug" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="flex justify-between items-start mb-4"><div><h1 className="text-2xl font-bold">{d.fullName}</h1><p className="text-xs text-[#525252]">{d.title}</p></div><div className="text-right text-xs">{d.email}<br />{d.phone}<br />{d.address}</div></div>
+      <div className="flex justify-between items-start mb-4"><div><h1 className="text-2xl font-bold">{d.fullName}</h1><p className="text-xs text-neutral-600">{d.title}</p></div><div className="text-right text-xs">{d.email}<br />{d.phone}<br />{d.address}</div></div>
       <Section title="Summary"><p>{d.objective}</p></Section>
       <Section title="Experience">{d.experience.map(e => <div key={e.id} className="mb-2"><div className="flex justify-between"><strong>{e.role} · {e.company}</strong><span className="text-[10px]">{e.period}</span></div><p className="text-[11px]">{e.description}</p></div>)}</Section>
       <Section title="Education">{d.education.map(e => <div key={e.id} className="text-[11px] flex justify-between"><span><strong>{e.degree}</strong> · {e.school}</span><span>{e.period}</span></div>)}</Section>
@@ -227,10 +227,10 @@ function CompactTpl({ d }: { d: ResumeData }) {
 function ExecutiveTpl({ d }: { d: ResumeData }) {
   return (
     <div style={{ fontFamily: "Georgia, serif" }}>
-      <div className="p-10 bg-[#f5f5f5] border-b-4" style={{ borderColor: "#0f172a" }}>
-        <h1 className="text-4xl font-bold text-[#171717]">{d.fullName}</h1>
-        <p className="text-base text-[#404040] mt-1">{d.title}</p>
-        <p className="text-xs mt-3 text-[#525252]">{[d.email, d.phone, d.address].filter(Boolean).join("  ·  ")}</p>
+      <div className="p-10 bg-neutral-100 border-b-4" style={{ borderColor: "#0f172a" }}>
+        <h1 className="text-4xl font-bold text-neutral-900">{d.fullName}</h1>
+        <p className="text-base text-neutral-700 mt-1">{d.title}</p>
+        <p className="text-xs mt-3 text-neutral-600">{[d.email, d.phone, d.address].filter(Boolean).join("  ·  ")}</p>
       </div>
       <div className="p-10 text-[13px] leading-relaxed">
         <Section title="Executive Summary" color="#0f172a"><p>{d.objective}</p></Section>
@@ -245,14 +245,14 @@ function ExecutiveTpl({ d }: { d: ResumeData }) {
 function TechieTpl({ d }: { d: ResumeData }) {
   return (
     <div className="p-10 text-[13px] leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="font-mono text-xs text-[#059669] mb-2">$ whoami</div>
+      <div className="font-mono text-xs text-emerald-600 mb-2">$ whoami</div>
       <h1 className="text-3xl font-bold">{d.fullName}</h1>
-      <p className="font-mono text-sm text-[#525252]">// {d.title}</p>
+      <p className="font-mono text-sm text-neutral-600">// {d.title}</p>
       <p className="text-xs mt-2 font-mono">{[d.email, d.phone, d.address].filter(Boolean).join(" | ")}</p>
       <Section title="// summary" color="#059669"><p>{d.objective}</p></Section>
-      <Section title="// experience" color="#059669">{d.experience.map(e => <div key={e.id} className="mb-3"><div className="flex justify-between"><strong className="font-mono">{e.role}</strong><span className="text-xs font-mono">{e.period}</span></div><div className="text-xs text-[#525252]">@ {e.company}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
-      <Section title="// stack" color="#059669"><div className="flex flex-wrap gap-1.5">{d.skills.map(s => <span key={s} className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#059669] text-[#047857]">{s}</span>)}</div></Section>
-      <Section title="// education" color="#059669">{d.education.map(e => <div key={e.id} className="text-xs font-mono mb-1">{e.degree} — {e.school} <span className="text-[#737373]">[{e.period}]</span></div>)}</Section>
+      <Section title="// experience" color="#059669">{d.experience.map(e => <div key={e.id} className="mb-3"><div className="flex justify-between"><strong className="font-mono">{e.role}</strong><span className="text-xs font-mono">{e.period}</span></div><div className="text-xs text-neutral-600">@ {e.company}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
+      <Section title="// stack" color="#059669"><div className="flex flex-wrap gap-1.5">{d.skills.map(s => <span key={s} className="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-600 text-emerald-700">{s}</span>)}</div></Section>
+      <Section title="// education" color="#059669">{d.education.map(e => <div key={e.id} className="text-xs font-mono mb-1">{e.degree} — {e.school} <span className="text-neutral-500">[{e.period}]</span></div>)}</Section>
     </div>
   );
 }
