@@ -13,7 +13,7 @@ export const ResumePreview = forwardRef<HTMLDivElement, Props>(({ data, template
       ref={ref}
       id="resume-canvas"
       className="bg-white text-neutral-900 mx-auto shadow-card"
-      style={{ width: "794px", minHeight: "1123px" }}
+      style={{ width: "900px", minHeight: "1273px" }}
     >
       {template === "modern" && <ModernTpl d={data} />}
       {template === "minimal" && <MinimalTpl d={data} />}
