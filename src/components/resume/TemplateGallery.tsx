@@ -20,7 +20,7 @@ export function TemplateGallery({ value, onChange }: Props) {
             className={cn(
               "group relative rounded-xl border-2 overflow-hidden text-left transition-all bg-white",
               "hover:-translate-y-1 hover:shadow-elegant",
-              active ? "border-brand shadow-elegant" : "border-border hover:border-brand/50"
+              active ? "border-brand shadow-elegant" : "border-border hover:border-brand"
             )}
           >
             <div className="aspect-[3/4] overflow-hidden bg-neutral-100 relative">
@@ -35,7 +35,7 @@ export function TemplateGallery({ value, onChange }: Props) {
               >
                 <ResumePreview data={defaultResume} template={t.id} />
               </div>
-              <div className="absolute inset-0 ring-1 ring-inset ring-black/5 group-hover:ring-brand/30 transition" />
+              <div className="absolute inset-0 ring-1 ring-inset ring-[#111111] group-hover:ring-brand transition" />
             </div>
             <div className="p-3 flex items-center justify-between bg-white border-t">
               <div>

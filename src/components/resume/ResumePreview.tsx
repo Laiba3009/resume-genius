@@ -66,7 +66,7 @@ function ModernTpl({ d }: { d: ResumeData }) {
         </div>
         <Section title="Skills" color="#fff">
           <div className="flex flex-wrap gap-1.5">
-            {d.skills.map((s) => <span key={s} className="text-[10px] bg-white/10 px-2 py-1 rounded">{s}</span>)}
+            {d.skills.map((s) => <span key={s} className="text-[10px] bg-[#ffffff] px-2 py-1 rounded">{s}</span>)}
           </div>
         </Section>
       </aside>
