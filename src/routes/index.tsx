@@ -31,7 +31,7 @@ function Landing() {
 
 function Nav() {
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50">
+    <header className="sticky top-0 z-40 backdrop-blur-xl bg-background border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg">
           <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
@@ -157,7 +157,7 @@ function TemplatesShowcase() {
             className="aspect-[3/4] rounded-xl border bg-card shadow-card p-3 hover:shadow-elegant hover:-translate-y-1 transition"
           >
             <div className="size-full rounded-lg bg-muted relative overflow-hidden">
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent text-white text-xs font-medium">
+              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-[#111111] to-transparent text-white text-xs font-medium">
                 {t.name}
               </div>
             </div>
@@ -184,7 +184,7 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/50 py-8">
+    <footer className="border-t border-border py-8">
       <div className="max-w-6xl mx-auto px-6 text-sm text-muted-foreground flex justify-between flex-wrap gap-2">
         <div>© {new Date().getFullYear()} Resumely. Built with love.</div>
         <div>A modern resume builder.</div>
