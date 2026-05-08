@@ -69,7 +69,44 @@ function Builder() {
     if (!previewRef.current) return;
     toast.loading("Generating PDF…", { id: "pdf" });
     try {
-      const canvas = await html2canvas(previewRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        onclone: (doc) => {
+          // html2canvas can't parse oklch() (used by Tailwind v4 + our tokens).
+          // Walk every element in the clone and rewrite color-bearing props
+          // to plain rgb() using a canvas-based conversion.
+          const ctx = doc.createElement("canvas").getContext("2d")!;
+          const toRgb = (v: string) => {
+            try { ctx.fillStyle = "#000"; ctx.fillStyle = v; return ctx.fillStyle as string; }
+            catch { return v; }
+          };
+          const props = [
+            "color","backgroundColor","borderTopColor","borderRightColor",
+            "borderBottomColor","borderLeftColor","outlineColor","fill","stroke",
+            "textDecorationColor","caretColor","columnRuleColor",
+          ] as const;
+          const all = doc.querySelectorAll<HTMLElement>("*");
+          all.forEach((el) => {
+            const cs = doc.defaultView!.getComputedStyle(el);
+            props.forEach((p) => {
+              const v = cs.getPropertyValue(p.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase()));
+              if (v && v.includes("oklch")) {
+                (el.style as any)[p] = toRgb(v);
+              }
+            });
+            // backgroundImage (gradients) often contain oklch too — strip if so
+            const bgi = cs.backgroundImage;
+            if (bgi && bgi.includes("oklch")) {
+              el.style.backgroundImage = bgi.replace(
+                /oklch\([^)]+\)/g,
+                (m) => toRgb(m)
+              );
+            }
+          });
+        },
+      });
       const img = canvas.toDataURL("image/png");
       const pdf = new jsPDF({ unit: "pt", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
