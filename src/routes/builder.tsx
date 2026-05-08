@@ -69,40 +69,59 @@ function Builder() {
     if (!previewRef.current) return;
     toast.loading("Generating PDF…", { id: "pdf" });
     try {
+      // --- oklch -> rgb conversion (html2canvas can't parse oklch) ---
+      const oklchToRgb = (L: number, C: number, h: number, alpha = 1) => {
+        const hr = (h * Math.PI) / 180;
+        const a = Math.cos(hr) * C;
+        const b = Math.sin(hr) * C;
+        const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+        const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+        const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+        const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+        let r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+        let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+        let bl = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
+        const toSrgb = (v: number) => {
+          v = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+          return Math.max(0, Math.min(255, Math.round(v * 255)));
+        };
+        return `rgba(${toSrgb(r)}, ${toSrgb(g)}, ${toSrgb(bl)}, ${alpha})`;
+      };
+      const replaceOklch = (str: string) =>
+        str.replace(/oklch\(\s*([0-9.%]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.%]+))?\s*\)/gi,
+          (_m, L, C, h, A) => {
+            const Ln = L.endsWith("%") ? parseFloat(L) / 100 : parseFloat(L);
+            const An = A ? (A.endsWith("%") ? parseFloat(A) / 100 : parseFloat(A)) : 1;
+            return oklchToRgb(Ln, parseFloat(C), parseFloat(h), An);
+          });
+
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
         onclone: (doc) => {
-          // html2canvas can't parse oklch() (used by Tailwind v4 + our tokens).
-          // Walk every element in the clone and rewrite color-bearing props
-          // to plain rgb() using a canvas-based conversion.
-          const ctx = doc.createElement("canvas").getContext("2d")!;
-          const toRgb = (v: string) => {
-            try { ctx.fillStyle = "#000"; ctx.fillStyle = v; return ctx.fillStyle as string; }
-            catch { return v; }
-          };
+          // 1) Sanitize all <style> tags
+          doc.querySelectorAll("style").forEach((s) => {
+            if (s.textContent && s.textContent.includes("oklch")) {
+              s.textContent = replaceOklch(s.textContent);
+            }
+          });
+          // 2) Sanitize inline styles on every element
           const props = [
-            "color","backgroundColor","borderTopColor","borderRightColor",
-            "borderBottomColor","borderLeftColor","outlineColor","fill","stroke",
-            "textDecorationColor","caretColor","columnRuleColor",
-          ] as const;
-          const all = doc.querySelectorAll<HTMLElement>("*");
-          all.forEach((el) => {
+            "color","background-color","border-top-color","border-right-color",
+            "border-bottom-color","border-left-color","outline-color","fill","stroke",
+            "text-decoration-color","caret-color","column-rule-color","background-image",
+          ];
+          doc.querySelectorAll<HTMLElement>("*").forEach((el) => {
             const cs = doc.defaultView!.getComputedStyle(el);
             props.forEach((p) => {
-              const v = cs.getPropertyValue(p.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase()));
+              const v = cs.getPropertyValue(p);
               if (v && v.includes("oklch")) {
-                (el.style as any)[p] = toRgb(v);
+                el.style.setProperty(p, replaceOklch(v));
               }
             });
-            // backgroundImage (gradients) often contain oklch too — strip if so
-            const bgi = cs.backgroundImage;
-            if (bgi && bgi.includes("oklch")) {
-              el.style.backgroundImage = bgi.replace(
-                /oklch\([^)]+\)/g,
-                (m) => toRgb(m)
-              );
+            if (el.getAttribute("style")?.includes("oklch")) {
+              el.setAttribute("style", replaceOklch(el.getAttribute("style")!));
             }
           });
         },
