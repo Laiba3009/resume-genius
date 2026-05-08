@@ -141,7 +141,7 @@ function Builder() {
 
   return (
     <div className="min-h-screen bg-gradient-soft">
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50 no-print">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background border-b border-border no-print">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2 font-display font-bold">
             <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
@@ -151,14 +151,14 @@ function Builder() {
           </Link>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm"><Link to="/"><ArrowLeft className="size-4 mr-1" /> Home</Link></Button>
-            <Button onClick={downloadPDF} className="bg-gradient-brand text-brand-foreground hover:opacity-90">
+            <Button onClick={downloadPDF} className="bg-gradient-brand text-brand-foreground">
               <Download className="size-4 mr-2" /> Download PDF
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
+      <main className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-10 xl:gap-12">
         {/* Left: form / templates */}
         <div className="space-y-4 no-print">
           <Tabs defaultValue="content">
@@ -176,8 +176,8 @@ function Builder() {
         </div>
 
         {/* Right: preview */}
-        <div className="bg-muted/40 rounded-2xl p-4 sm:p-8 overflow-auto">
-          <div className="origin-top mx-auto" style={{ transform: "scale(var(--preview-scale, 0.85))", transformOrigin: "top center" }}>
+        <div className="bg-muted rounded-2xl p-6 sm:p-8 overflow-auto flex justify-center items-start">
+          <div className="w-full max-w-5xl flex justify-center items-start">
             <ResumePreview ref={previewRef} data={data} template={template} />
           </div>
         </div>
