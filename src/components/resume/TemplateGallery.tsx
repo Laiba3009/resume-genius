@@ -1,6 +1,7 @@
-import { TEMPLATES, type TemplateId } from "@/lib/resume-types";
+import { TEMPLATES, type TemplateId, defaultResume } from "@/lib/resume-types";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ResumePreview } from "./ResumePreview";
 
 interface Props {
   value: TemplateId;
@@ -9,7 +10,7 @@ interface Props {
 
 export function TemplateGallery({ value, onChange }: Props) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
       {TEMPLATES.map((t) => {
         const active = value === t.id;
         return (
@@ -17,51 +18,39 @@ export function TemplateGallery({ value, onChange }: Props) {
             key={t.id}
             onClick={() => onChange(t.id)}
             className={cn(
-              "group relative aspect-[3/4] rounded-lg border-2 overflow-hidden text-left transition-all",
-              active ? "border-brand shadow-elegant scale-[1.02]" : "border-border hover:border-brand/50"
+              "group relative rounded-xl border-2 overflow-hidden text-left transition-all bg-white",
+              "hover:-translate-y-1 hover:shadow-elegant",
+              active ? "border-brand shadow-elegant" : "border-border hover:border-brand/50"
             )}
           >
-            <Thumb id={t.id} />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-              <div className="text-white text-xs font-semibold">{t.name}</div>
-              <div className="text-white/70 text-[10px] truncate">{t.desc}</div>
-            </div>
-            {active && (
-              <div className="absolute top-2 right-2 size-5 rounded-full bg-brand text-brand-foreground flex items-center justify-center">
-                <Check className="size-3" />
+            <div className="aspect-[3/4] overflow-hidden bg-neutral-100 relative">
+              <div
+                className="absolute top-0 left-1/2"
+                style={{
+                  width: "794px",
+                  transform: "translateX(-50%) scale(0.32)",
+                  transformOrigin: "top center",
+                  pointerEvents: "none",
+                }}
+              >
+                <ResumePreview data={defaultResume} template={t.id} />
               </div>
-            )}
+              <div className="absolute inset-0 ring-1 ring-inset ring-black/5 group-hover:ring-brand/30 transition" />
+            </div>
+            <div className="p-3 flex items-center justify-between bg-white border-t">
+              <div>
+                <div className="font-semibold text-sm">{t.name}</div>
+                <div className="text-[11px] text-muted-foreground">{t.desc}</div>
+              </div>
+              {active && (
+                <div className="size-6 rounded-full bg-brand text-brand-foreground flex items-center justify-center shrink-0">
+                  <Check className="size-3.5" />
+                </div>
+              )}
+            </div>
           </button>
         );
       })}
-    </div>
-  );
-}
-
-function Thumb({ id }: { id: TemplateId }) {
-  const styles: Record<TemplateId, React.CSSProperties> = {
-    modern: { background: "linear-gradient(135deg,#111 40%,#fff 40%)" },
-    minimal: { background: "#fafafa" },
-    creative: { background: "linear-gradient(135deg,#7c3aed,#ec4899)" },
-    corporate: { background: "#fff" },
-    ats: { background: "#fff" },
-    elegant: { background: "#faf7f2" },
-    sidebar: { background: "linear-gradient(90deg,#1f2937 35%,#fff 35%)" },
-    compact: { background: "#fff" },
-    executive: { background: "linear-gradient(180deg,#e5e7eb 30%,#fff 30%)" },
-    techie: { background: "#0a0a0a" },
-  };
-  return (
-    <div className="absolute inset-0" style={styles[id]}>
-      <div className="p-3 space-y-1.5">
-        <div className="h-1.5 w-12 rounded" style={{ background: id === "techie" ? "#10b981" : id === "creative" ? "rgba(255,255,255,.8)" : id === "modern" || id === "sidebar" ? "rgba(255,255,255,.7)" : "#111" }} />
-        <div className="h-1 w-8 rounded opacity-50" style={{ background: id === "techie" ? "#10b981" : id === "creative" || id === "modern" || id === "sidebar" ? "#fff" : "#999" }} />
-        <div className="pt-2 space-y-1">
-          {[80, 60, 70, 50, 65].map((w, i) => (
-            <div key={i} className="h-1 rounded" style={{ width: `${w}%`, background: id === "techie" ? "#10b98155" : id === "creative" || id === "modern" || id === "sidebar" ? "rgba(255,255,255,.4)" : "#ddd" }} />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
