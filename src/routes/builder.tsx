@@ -45,7 +45,7 @@ function Builder() {
     const sid = getSessionId();
     supabase.from("resumes").select("*").eq("session_id", sid).maybeSingle().then(({ data: row }) => {
       if (row) {
-        setData(row.data as ResumeData);
+        setData(row.data as unknown as ResumeData);
         setTemplate(row.template_id as TemplateId);
       }
       setLoaded(true);
