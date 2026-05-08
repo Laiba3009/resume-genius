@@ -70,11 +70,11 @@ function Builder() {
     toast.loading("Generating PDF…", { id: "pdf" });
     try {
       const unsafeColorFns = ["ok" + "lch", "la" + "b", "color" + "-" + "mix"];
-      const unsafeColorPattern = new RegExp(`(?:${unsafeColorFns.join("|")})\\([^;{}]+\\)`, "gi");
+      const unsafeColorPattern = new RegExp(`(?:${unsafeColorFns.join("|")})\\([^;{}]+\\)`, "i");
+      const unsafeColorPatternGlobal = new RegExp(`(?:${unsafeColorFns.join("|")})\\([^;{}]+\\)`, "gi");
       const isSafePaint = (value: string) =>
         !unsafeColorPattern.test(value) && !value.includes("var(") && !value.startsWith("color(");
       const safePaint = (value: string, fallback: string) => {
-        unsafeColorPattern.lastIndex = 0;
         return value && isSafePaint(value) ? value : fallback;
       };
 
@@ -87,7 +87,7 @@ function Builder() {
         windowHeight: previewRef.current.scrollHeight,
         onclone: (doc, clonedElement) => {
           doc.querySelectorAll("style").forEach((styleTag) => {
-            styleTag.textContent = styleTag.textContent?.replace(unsafeColorPattern, "#000000") ?? "";
+            styleTag.textContent = styleTag.textContent?.replace(unsafeColorPatternGlobal, "#000000") ?? "";
           });
 
           const colorProps: Array<[string, string]> = [
@@ -104,7 +104,7 @@ function Builder() {
             ["stroke", "none"],
           ];
 
-          clonedElement.querySelectorAll<HTMLElement>("*").forEach((el) => {
+          [clonedElement, ...clonedElement.querySelectorAll<HTMLElement>("*")].forEach((el) => {
             const cs = doc.defaultView!.getComputedStyle(el);
             colorProps.forEach(([prop, fallback]) => {
               const value = cs.getPropertyValue(prop);
