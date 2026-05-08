@@ -90,16 +90,16 @@ function Builder() {
             styleTag.textContent = styleTag.textContent?.replace(unsafeColorPattern, "#000000") ?? "";
           });
 
-          const colorProps: Array<[keyof CSSStyleDeclaration, string]> = [
+          const colorProps: Array<[string, string]> = [
             ["color", "#111827"],
-            ["backgroundColor", "transparent"],
-            ["borderTopColor", "#e5e7eb"],
-            ["borderRightColor", "#e5e7eb"],
-            ["borderBottomColor", "#e5e7eb"],
-            ["borderLeftColor", "#e5e7eb"],
-            ["outlineColor", "#111827"],
-            ["textDecorationColor", "#111827"],
-            ["caretColor", "#111827"],
+            ["background-color", "transparent"],
+            ["border-top-color", "#e5e7eb"],
+            ["border-right-color", "#e5e7eb"],
+            ["border-bottom-color", "#e5e7eb"],
+            ["border-left-color", "#e5e7eb"],
+            ["outline-color", "#111827"],
+            ["text-decoration-color", "#111827"],
+            ["caret-color", "#111827"],
             ["fill", "#111827"],
             ["stroke", "none"],
           ];
@@ -107,8 +107,8 @@ function Builder() {
           clonedElement.querySelectorAll<HTMLElement>("*").forEach((el) => {
             const cs = doc.defaultView!.getComputedStyle(el);
             colorProps.forEach(([prop, fallback]) => {
-              const value = cs[prop]?.toString() ?? "";
-              el.style[prop] = safePaint(value, fallback) as never;
+              const value = cs.getPropertyValue(prop);
+              el.style.setProperty(prop, safePaint(value, fallback));
             });
             el.style.backgroundImage = safePaint(cs.backgroundImage, "none");
             el.style.boxShadow = safePaint(cs.boxShadow, "none");
