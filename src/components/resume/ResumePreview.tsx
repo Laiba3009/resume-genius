@@ -1,19 +1,22 @@
-import { forwardRef } from "react";
+import { forwardRef, type ReactNode } from "react";
 import type { ResumeData, TemplateId } from "@/lib/resume-types";
-import { Mail, Phone, MapPin, User } from "lucide-react";
+import { Mail, MapPin, Phone, User } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Props {
   data: ResumeData;
   template: TemplateId;
 }
 
+const contactItems = (d: ResumeData) => [d.email, d.phone, d.address].filter(Boolean);
+
 export const ResumePreview = forwardRef<HTMLDivElement, Props>(({ data, template }, ref) => {
   return (
     <div
       ref={ref}
       id="resume-canvas"
-      className="bg-white text-neutral-900 mx-auto shadow-card"
-      style={{ width: "794px", minHeight: "1123px" }}
+      data-resume-page
+      className="mx-auto w-[794px] min-h-[1123px] overflow-visible bg-white text-slate-900 shadow-card print:shadow-none"
     >
       {template === "modern" && <ModernTpl d={data} />}
       {template === "minimal" && <MinimalTpl d={data} />}
@@ -33,55 +36,114 @@ ResumePreview.displayName = "ResumePreview";
 function Avatar({ src, size = 80 }: { src?: string; size?: number }) {
   return (
     <div
-      className="rounded-full bg-neutral-200 overflow-hidden flex items-center justify-center shrink-0"
+      className="flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200"
       style={{ width: size, height: size }}
     >
-      {src ? <img src={src} className="w-full h-full object-cover" /> : <User className="text-neutral-400" />}
+      {src ? (
+        <img src={src} alt="Profile" className="h-full w-full object-cover" />
+      ) : (
+        <User className="h-1/2 w-1/2 text-slate-400" />
+      )}
     </div>
   );
 }
 
-const Section = ({ title, children, color = "#111" }: any) => (
-  <div className="mb-5">
-    <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2 pb-1 border-b" style={{ color, borderColor: color + "33" }}>{title}</h3>
-    {children}
-  </div>
-);
+function Section({
+  title,
+  children,
+  color = "#111827",
+  className,
+}: {
+  title: string;
+  children: ReactNode;
+  color?: string;
+  className?: string;
+}) {
+  return (
+    <section data-pdf-section className={cn("break-inside-avoid space-y-3 overflow-visible", className)}>
+      <h3
+        className="border-b pb-1 text-[11px] font-bold uppercase leading-relaxed tracking-[0.18em]"
+        style={{ color, borderColor: `${color}33` }}
+      >
+        {title}
+      </h3>
+      <div className="space-y-3 leading-relaxed break-words">{children}</div>
+    </section>
+  );
+}
 
-/* ============ TEMPLATES ============ */
+function ExperienceList({ d, compact = false }: { d: ResumeData; compact?: boolean }) {
+  return (
+    <div className={compact ? "space-y-2" : "space-y-4"}>
+      {d.experience.map((e) => (
+        <article key={e.id} className="break-inside-avoid space-y-1 overflow-visible">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <strong className="min-w-0 break-words leading-snug">{e.role}</strong>
+            <span className="shrink-0 text-xs leading-relaxed text-slate-500">{e.period}</span>
+          </div>
+          <div className="break-words text-xs italic leading-relaxed text-slate-600">{e.company}</div>
+          <p className={cn("break-words text-xs leading-relaxed text-slate-800", compact && "leading-normal")}>{e.description}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function EducationList({ d }: { d: ResumeData }) {
+  return (
+    <div className="space-y-2">
+      {d.education.map((e) => (
+        <article key={e.id} className="flex flex-wrap justify-between gap-x-4 gap-y-1 break-inside-avoid text-xs leading-relaxed">
+          <span className="min-w-0 break-words">
+            <strong>{e.degree}</strong> · {e.school}
+          </span>
+          <span className="shrink-0 text-slate-500">{e.period}</span>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function SkillPills({ skills, dark = false }: { skills: string[]; dark?: boolean }) {
+  return (
+    <div className="flex flex-wrap gap-2 overflow-visible">
+      {skills.map((s) => (
+        <span
+          key={s}
+          className={cn(
+            "max-w-full break-words rounded-full px-2.5 py-1 text-[10px] font-medium leading-relaxed",
+            dark ? "bg-slate-700 text-white" : "bg-slate-100 text-slate-700",
+          )}
+        >
+          {s}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 function ModernTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr] h-full" style={{ fontFamily: "Inter, sans-serif" }}>
-      <aside className="bg-neutral-900 text-white p-8 space-y-6">
+    <div className="grid min-h-[1123px] grid-cols-[260px_1fr] overflow-visible font-sans">
+      <aside className="space-y-6 overflow-visible bg-slate-900 p-8 text-white">
         <Avatar src={d.photo} size={96} />
-        <div>
+        <div className="space-y-1 break-words">
           <h1 className="text-2xl font-bold leading-tight">{d.fullName}</h1>
-          <p className="text-neutral-300 text-sm mt-1">{d.title}</p>
+          <p className="text-sm leading-relaxed text-slate-300">{d.title}</p>
         </div>
-        <div className="space-y-2 text-xs">
-          {d.email && <div className="flex items-center gap-2"><Mail className="size-3" /> {d.email}</div>}
-          {d.phone && <div className="flex items-center gap-2"><Phone className="size-3" /> {d.phone}</div>}
-          {d.address && <div className="flex items-center gap-2"><MapPin className="size-3" /> {d.address}</div>}
+        <div className="space-y-2 break-words text-xs leading-relaxed text-slate-100">
+          {d.email && <div className="flex gap-2"><Mail className="mt-0.5 size-3 shrink-0" /> <span>{d.email}</span></div>}
+          {d.phone && <div className="flex gap-2"><Phone className="mt-0.5 size-3 shrink-0" /> <span>{d.phone}</span></div>}
+          {d.address && <div className="flex gap-2"><MapPin className="mt-0.5 size-3 shrink-0" /> <span>{d.address}</span></div>}
         </div>
-        <Section title="Skills" color="#fff">
-          <div className="flex flex-wrap gap-1.5">
-            {d.skills.map((s) => <span key={s} className="text-[10px] bg-white/10 px-2 py-1 rounded">{s}</span>)}
-          </div>
+        <Section title="Skills" color="#ffffff">
+          <SkillPills skills={d.skills} dark />
         </Section>
       </aside>
-      <main className="p-8 text-[13px] leading-relaxed">
-        <Section title="Profile"><p>{d.objective}</p></Section>
-        <Section title="Experience">{d.experience.map(e => (
-          <div key={e.id} className="mb-3">
-            <div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-neutral-500">{e.period}</span></div>
-            <div className="text-xs text-neutral-600 italic">{e.company}</div>
-            <p className="text-xs mt-1">{e.description}</p>
-          </div>
-        ))}</Section>
-        <Section title="Education">{d.education.map(e => (
-          <div key={e.id} className="mb-2"><div className="flex justify-between"><strong>{e.degree}</strong><span className="text-xs text-neutral-500">{e.period}</span></div><div className="text-xs text-neutral-600">{e.school}</div></div>
-        ))}</Section>
+      <main className="space-y-6 overflow-visible p-9 text-[13px] leading-relaxed">
+        <Section title="Profile"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+        <Section title="Experience"><ExperienceList d={d} /></Section>
+        <Section title="Education"><EducationList d={d} /></Section>
       </main>
     </div>
   );
@@ -89,124 +151,118 @@ function ModernTpl({ d }: { d: ResumeData }) {
 
 function MinimalTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-12" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-light tracking-tight">{d.fullName}</h1>
-        <p className="text-sm text-neutral-500 mt-2 tracking-widest uppercase">{d.title}</p>
-        <div className="text-xs text-neutral-500 mt-3 flex justify-center gap-4">
-          {d.email && <span>{d.email}</span>}{d.phone && <span>· {d.phone}</span>}{d.address && <span>· {d.address}</span>}
+    <div className="min-h-[1123px] space-y-8 overflow-visible p-12 font-sans text-[13px] leading-relaxed">
+      <header data-pdf-section className="space-y-3 break-inside-avoid text-center">
+        <h1 className="break-words text-4xl font-light leading-tight tracking-normal">{d.fullName}</h1>
+        <p className="break-words text-sm uppercase leading-relaxed tracking-[0.2em] text-slate-500">{d.title}</p>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 break-words text-xs leading-relaxed text-slate-500">
+          {contactItems(d).map((item) => <span key={item}>{item}</span>)}
         </div>
-      </div>
-      <div className="text-[13px] leading-relaxed space-y-5">
-        <p className="text-center italic max-w-xl mx-auto text-neutral-600">{d.objective}</p>
-        <Section title="Experience">{d.experience.map(e => (
-          <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role} — {e.company}</strong><span className="text-xs">{e.period}</span></div><p className="text-xs mt-1">{e.description}</p></div>
-        ))}</Section>
-        <Section title="Education">{d.education.map(e => <div key={e.id} className="text-xs flex justify-between mb-1"><span><strong>{e.degree}</strong> · {e.school}</span><span>{e.period}</span></div>)}</Section>
-        <Section title="Skills"><p className="text-xs">{d.skills.join(" · ")}</p></Section>
-      </div>
+      </header>
+      <p data-pdf-section className="mx-auto max-w-xl break-words text-center italic leading-relaxed text-slate-600">{d.objective}</p>
+      <Section title="Experience"><ExperienceList d={d} /></Section>
+      <Section title="Education"><EducationList d={d} /></Section>
+      <Section title="Skills"><p className="break-words text-xs leading-relaxed">{d.skills.join(" · ")}</p></Section>
     </div>
   );
 }
 
 function CreativeTpl({ d }: { d: ResumeData }) {
   return (
-    <div style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="p-10 text-white" style={{ background: "linear-gradient(135deg,#7c3aed,#ec4899)" }}>
-        <div className="flex items-center gap-5">
+    <div className="min-h-[1123px] overflow-visible font-sans">
+      <header data-pdf-section className="bg-gradient-to-br from-violet-700 to-pink-500 p-10 text-white">
+        <div className="flex flex-wrap items-center gap-5 overflow-visible">
           <Avatar src={d.photo} size={88} />
-          <div>
-            <h1 className="text-3xl font-bold">{d.fullName}</h1>
-            <p className="opacity-90">{d.title}</p>
-            <div className="text-xs opacity-80 mt-2 flex gap-3">{d.email}<span>·</span>{d.phone}<span>·</span>{d.address}</div>
+          <div className="min-w-0 flex-1 space-y-2 break-words">
+            <h1 className="text-3xl font-bold leading-tight">{d.fullName}</h1>
+            <p className="leading-relaxed text-white">{d.title}</p>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs leading-relaxed text-white">
+              {contactItems(d).map((item) => <span key={item}>{item}</span>)}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="p-10 text-[13px] leading-relaxed">
-        <Section title="About" color="#7c3aed"><p>{d.objective}</p></Section>
-        <Section title="Experience" color="#7c3aed">{d.experience.map(e => (
-          <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs text-pink-600">{e.period}</span></div><div className="text-xs italic">{e.company}</div><p className="text-xs mt-1">{e.description}</p></div>
-        ))}</Section>
-        <Section title="Skills" color="#7c3aed"><div className="flex flex-wrap gap-1.5">{d.skills.map(s => <span key={s} className="text-[10px] px-2 py-1 rounded-full" style={{ background: "linear-gradient(135deg,#7c3aed22,#ec489922)", color: "#7c3aed" }}>{s}</span>)}</div></Section>
-        <Section title="Education" color="#7c3aed">{d.education.map(e => <div key={e.id} className="text-xs mb-1"><strong>{e.degree}</strong> — {e.school} <span className="text-neutral-500">({e.period})</span></div>)}</Section>
-      </div>
+      </header>
+      <main className="space-y-6 overflow-visible p-10 text-[13px] leading-relaxed">
+        <Section title="About" color="#6d28d9"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+        <Section title="Experience" color="#6d28d9"><ExperienceList d={d} /></Section>
+        <Section title="Skills" color="#6d28d9"><SkillPills skills={d.skills} /></Section>
+        <Section title="Education" color="#6d28d9"><EducationList d={d} /></Section>
+      </main>
     </div>
   );
 }
 
 function CorporateTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-10" style={{ fontFamily: "Georgia, serif" }}>
-      <div className="border-b-2 border-neutral-900 pb-4 mb-6">
-        <h1 className="text-3xl font-bold">{d.fullName}</h1>
-        <p className="text-sm text-neutral-700">{d.title}</p>
-        <div className="text-xs mt-2">{[d.email, d.phone, d.address].filter(Boolean).join("  |  ")}</div>
-      </div>
-      <div className="text-[13px] leading-relaxed">
-        <Section title="Summary"><p>{d.objective}</p></Section>
-        <Section title="Professional Experience">{d.experience.map(e => (
-          <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.company}</strong><span className="text-xs">{e.period}</span></div><div className="italic text-xs">{e.role}</div><p className="text-xs mt-1">{e.description}</p></div>
-        ))}</Section>
-        <Section title="Education">{d.education.map(e => <div key={e.id} className="text-xs mb-1 flex justify-between"><span><strong>{e.school}</strong> — {e.degree}</span><span>{e.period}</span></div>)}</Section>
-        <Section title="Core Competencies"><p className="text-xs">{d.skills.join(" • ")}</p></Section>
-      </div>
+    <div className="min-h-[1123px] space-y-6 overflow-visible p-10 text-[13px] leading-relaxed" style={{ fontFamily: "Georgia, serif" }}>
+      <header data-pdf-section className="break-inside-avoid border-b-2 border-slate-900 pb-5">
+        <h1 className="break-words text-3xl font-bold leading-tight">{d.fullName}</h1>
+        <p className="mt-1 break-words text-sm leading-relaxed text-slate-700">{d.title}</p>
+        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 break-words text-xs leading-relaxed text-slate-600">
+          {contactItems(d).map((item) => <span key={item}>{item}</span>)}
+        </div>
+      </header>
+      <Section title="Summary"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+      <Section title="Professional Experience"><ExperienceList d={d} /></Section>
+      <Section title="Education"><EducationList d={d} /></Section>
+      <Section title="Core Competencies"><p className="break-words text-xs leading-relaxed">{d.skills.join(" • ")}</p></Section>
     </div>
   );
 }
 
 function AtsTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-10 text-[13px] leading-relaxed" style={{ fontFamily: "Arial, sans-serif" }}>
-      <h1 className="text-2xl font-bold">{d.fullName}</h1>
-      <p>{d.title}</p>
-      <p className="text-xs mt-1">{[d.email, d.phone, d.address].filter(Boolean).join(" | ")}</p>
-      <hr className="my-3" />
-      <h2 className="font-bold uppercase text-sm mt-3">Summary</h2><p>{d.objective}</p>
-      <h2 className="font-bold uppercase text-sm mt-3">Experience</h2>
-      {d.experience.map(e => <div key={e.id} className="mb-2"><strong>{e.role}</strong>, {e.company} ({e.period})<br /><span className="text-xs">{e.description}</span></div>)}
-      <h2 className="font-bold uppercase text-sm mt-3">Education</h2>
-      {d.education.map(e => <div key={e.id} className="text-xs">{e.degree}, {e.school} ({e.period})</div>)}
-      <h2 className="font-bold uppercase text-sm mt-3">Skills</h2><p className="text-xs">{d.skills.join(", ")}</p>
+    <div className="min-h-[1123px] space-y-5 overflow-visible p-10 text-[13px] leading-relaxed" style={{ fontFamily: "Arial, sans-serif" }}>
+      <header data-pdf-section className="break-inside-avoid space-y-1 border-b border-slate-300 pb-4">
+        <h1 className="break-words text-2xl font-bold leading-tight">{d.fullName}</h1>
+        <p className="break-words leading-relaxed">{d.title}</p>
+        <p className="break-words text-xs leading-relaxed">{contactItems(d).join(" | ")}</p>
+      </header>
+      <Section title="Summary"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+      <Section title="Experience"><ExperienceList d={d} /></Section>
+      <Section title="Education"><EducationList d={d} /></Section>
+      <Section title="Skills"><p className="break-words text-xs leading-relaxed">{d.skills.join(", ")}</p></Section>
     </div>
   );
 }
 
 function ElegantTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-12" style={{ fontFamily: "Georgia, serif" }}>
-      <div className="text-center mb-8 border-b border-neutral-300 pb-6">
-        <h1 className="text-5xl font-normal italic">{d.fullName}</h1>
-        <p className="text-sm tracking-[0.3em] uppercase mt-3 text-neutral-500">{d.title}</p>
-        <p className="text-xs mt-2 text-neutral-600">{[d.email, d.phone, d.address].filter(Boolean).join(" · ")}</p>
-      </div>
-      <div className="text-[13px] leading-relaxed space-y-5">
-        <p className="italic text-center text-neutral-700">{d.objective}</p>
-        <Section title="Experience">{d.experience.map(e => <div key={e.id} className="mb-3 text-center"><div className="font-bold">{e.role}</div><div className="text-xs italic">{e.company} · {e.period}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
-        <Section title="Education">{d.education.map(e => <div key={e.id} className="text-xs text-center mb-1"><strong>{e.degree}</strong> — {e.school} · {e.period}</div>)}</Section>
-        <Section title="Skills"><p className="text-xs text-center">{d.skills.join(" · ")}</p></Section>
-      </div>
+    <div className="min-h-[1123px] space-y-7 overflow-visible p-12 text-[13px] leading-relaxed" style={{ fontFamily: "Georgia, serif" }}>
+      <header data-pdf-section className="break-inside-avoid space-y-3 border-b border-slate-300 pb-6 text-center">
+        <h1 className="break-words text-5xl font-normal italic leading-tight">{d.fullName}</h1>
+        <p className="break-words text-sm uppercase leading-relaxed tracking-[0.24em] text-slate-500">{d.title}</p>
+        <p className="break-words text-xs leading-relaxed text-slate-600">{contactItems(d).join(" · ")}</p>
+      </header>
+      <p data-pdf-section className="break-words text-center italic leading-relaxed text-slate-700">{d.objective}</p>
+      <Section title="Experience"><ExperienceList d={d} /></Section>
+      <Section title="Education"><EducationList d={d} /></Section>
+      <Section title="Skills"><p className="break-words text-center text-xs leading-relaxed">{d.skills.join(" · ")}</p></Section>
     </div>
   );
 }
 
 function SidebarTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="grid grid-cols-[260px_1fr] h-full" style={{ fontFamily: "Inter, sans-serif" }}>
-      <aside className="p-7 text-white space-y-5" style={{ background: "#1f2937" }}>
+    <div className="grid min-h-[1123px] grid-cols-[260px_1fr] overflow-visible font-sans">
+      <aside className="space-y-6 overflow-visible bg-slate-800 p-7 text-white">
         <Avatar src={d.photo} size={110} />
-        <div><h1 className="text-xl font-bold">{d.fullName}</h1><p className="text-xs opacity-80">{d.title}</p></div>
-        <Section title="Contact" color="#fff">
-          <div className="text-xs space-y-1.5">
-            {d.email && <div>{d.email}</div>}{d.phone && <div>{d.phone}</div>}{d.address && <div>{d.address}</div>}
+        <div className="space-y-1 break-words">
+          <h1 className="text-xl font-bold leading-tight">{d.fullName}</h1>
+          <p className="text-xs leading-relaxed text-white">{d.title}</p>
+        </div>
+        <Section title="Contact" color="#ffffff">
+          <div className="space-y-1.5 break-words text-xs leading-relaxed text-white">
+            {contactItems(d).map((item) => <div key={item}>{item}</div>)}
             {d.status && <div>{d.status}</div>}
           </div>
         </Section>
-        <Section title="Skills" color="#fff"><div className="text-xs space-y-1">{d.skills.map(s => <div key={s}>• {s}</div>)}</div></Section>
+        <Section title="Skills" color="#ffffff"><SkillPills skills={d.skills} dark /></Section>
       </aside>
-      <main className="p-8 text-[13px] leading-relaxed">
-        <Section title="Profile"><p>{d.objective}</p></Section>
-        <Section title="Experience">{d.experience.map(e => <div key={e.id} className="mb-3"><div className="flex justify-between"><strong>{e.role}</strong><span className="text-xs">{e.period}</span></div><div className="text-xs italic">{e.company}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
-        <Section title="Education">{d.education.map(e => <div key={e.id} className="text-xs mb-1 flex justify-between"><span><strong>{e.degree}</strong> · {e.school}</span><span>{e.period}</span></div>)}</Section>
+      <main className="space-y-6 overflow-visible p-9 text-[13px] leading-relaxed">
+        <Section title="Profile"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+        <Section title="Experience"><ExperienceList d={d} /></Section>
+        <Section title="Education"><EducationList d={d} /></Section>
       </main>
     </div>
   );
@@ -214,45 +270,55 @@ function SidebarTpl({ d }: { d: ResumeData }) {
 
 function CompactTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-8 text-[12px] leading-snug" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="flex justify-between items-start mb-4"><div><h1 className="text-2xl font-bold">{d.fullName}</h1><p className="text-xs text-neutral-600">{d.title}</p></div><div className="text-right text-xs">{d.email}<br />{d.phone}<br />{d.address}</div></div>
-      <Section title="Summary"><p>{d.objective}</p></Section>
-      <Section title="Experience">{d.experience.map(e => <div key={e.id} className="mb-2"><div className="flex justify-between"><strong>{e.role} · {e.company}</strong><span className="text-[10px]">{e.period}</span></div><p className="text-[11px]">{e.description}</p></div>)}</Section>
-      <Section title="Education">{d.education.map(e => <div key={e.id} className="text-[11px] flex justify-between"><span><strong>{e.degree}</strong> · {e.school}</span><span>{e.period}</span></div>)}</Section>
-      <Section title="Skills"><p className="text-[11px]">{d.skills.join(" • ")}</p></Section>
+    <div className="min-h-[1123px] space-y-4 overflow-visible p-8 font-sans text-[12px] leading-relaxed">
+      <header data-pdf-section className="flex flex-wrap items-start justify-between gap-4 break-inside-avoid border-b border-slate-200 pb-4">
+        <div className="min-w-0 flex-1 break-words">
+          <h1 className="text-2xl font-bold leading-tight">{d.fullName}</h1>
+          <p className="text-xs leading-relaxed text-slate-600">{d.title}</p>
+        </div>
+        <div className="max-w-[260px] space-y-1 break-words text-right text-xs leading-relaxed text-slate-600">
+          {contactItems(d).map((item) => <div key={item}>{item}</div>)}
+        </div>
+      </header>
+      <Section title="Summary"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+      <Section title="Experience"><ExperienceList d={d} compact /></Section>
+      <Section title="Education"><EducationList d={d} /></Section>
+      <Section title="Skills"><p className="break-words text-[11px] leading-relaxed">{d.skills.join(" • ")}</p></Section>
     </div>
   );
 }
 
 function ExecutiveTpl({ d }: { d: ResumeData }) {
   return (
-    <div style={{ fontFamily: "Georgia, serif" }}>
-      <div className="p-10 bg-neutral-100 border-b-4" style={{ borderColor: "#0f172a" }}>
-        <h1 className="text-4xl font-bold text-neutral-900">{d.fullName}</h1>
-        <p className="text-base text-neutral-700 mt-1">{d.title}</p>
-        <p className="text-xs mt-3 text-neutral-600">{[d.email, d.phone, d.address].filter(Boolean).join("  ·  ")}</p>
-      </div>
-      <div className="p-10 text-[13px] leading-relaxed">
-        <Section title="Executive Summary" color="#0f172a"><p>{d.objective}</p></Section>
-        <Section title="Leadership Experience" color="#0f172a">{d.experience.map(e => <div key={e.id} className="mb-3"><div className="flex justify-between"><strong className="uppercase tracking-wide">{e.role}</strong><span className="text-xs">{e.period}</span></div><div className="italic text-xs">{e.company}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
-        <Section title="Education" color="#0f172a">{d.education.map(e => <div key={e.id} className="text-xs flex justify-between mb-1"><span><strong>{e.degree}</strong>, {e.school}</span><span>{e.period}</span></div>)}</Section>
-        <Section title="Expertise" color="#0f172a"><p className="text-xs">{d.skills.join(" • ")}</p></Section>
-      </div>
+    <div className="min-h-[1123px] overflow-visible" style={{ fontFamily: "Georgia, serif" }}>
+      <header data-pdf-section className="break-inside-avoid border-b-4 border-slate-900 bg-slate-100 p-10">
+        <h1 className="break-words text-4xl font-bold leading-tight text-slate-900">{d.fullName}</h1>
+        <p className="mt-1 break-words text-base leading-relaxed text-slate-700">{d.title}</p>
+        <p className="mt-3 break-words text-xs leading-relaxed text-slate-600">{contactItems(d).join(" · ")}</p>
+      </header>
+      <main className="space-y-6 overflow-visible p-10 text-[13px] leading-relaxed">
+        <Section title="Executive Summary" color="#0f172a"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+        <Section title="Leadership Experience" color="#0f172a"><ExperienceList d={d} /></Section>
+        <Section title="Education" color="#0f172a"><EducationList d={d} /></Section>
+        <Section title="Expertise" color="#0f172a"><p className="break-words text-xs leading-relaxed">{d.skills.join(" • ")}</p></Section>
+      </main>
     </div>
   );
 }
 
 function TechieTpl({ d }: { d: ResumeData }) {
   return (
-    <div className="p-10 text-[13px] leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="font-mono text-xs text-emerald-600 mb-2">$ whoami</div>
-      <h1 className="text-3xl font-bold">{d.fullName}</h1>
-      <p className="font-mono text-sm text-neutral-600">// {d.title}</p>
-      <p className="text-xs mt-2 font-mono">{[d.email, d.phone, d.address].filter(Boolean).join(" | ")}</p>
-      <Section title="// summary" color="#059669"><p>{d.objective}</p></Section>
-      <Section title="// experience" color="#059669">{d.experience.map(e => <div key={e.id} className="mb-3"><div className="flex justify-between"><strong className="font-mono">{e.role}</strong><span className="text-xs font-mono">{e.period}</span></div><div className="text-xs text-neutral-600">@ {e.company}</div><p className="text-xs mt-1">{e.description}</p></div>)}</Section>
-      <Section title="// stack" color="#059669"><div className="flex flex-wrap gap-1.5">{d.skills.map(s => <span key={s} className="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-600 text-emerald-700">{s}</span>)}</div></Section>
-      <Section title="// education" color="#059669">{d.education.map(e => <div key={e.id} className="text-xs font-mono mb-1">{e.degree} — {e.school} <span className="text-neutral-500">[{e.period}]</span></div>)}</Section>
+    <div className="min-h-[1123px] space-y-5 overflow-visible p-10 font-sans text-[13px] leading-relaxed">
+      <header data-pdf-section className="break-inside-avoid space-y-2 border-b border-emerald-200 pb-5">
+        <div className="font-mono text-xs leading-relaxed text-emerald-600">$ whoami</div>
+        <h1 className="break-words text-3xl font-bold leading-tight">{d.fullName}</h1>
+        <p className="break-words font-mono text-sm leading-relaxed text-slate-600">// {d.title}</p>
+        <p className="break-words font-mono text-xs leading-relaxed">{contactItems(d).join(" | ")}</p>
+      </header>
+      <Section title="// summary" color="#059669"><p className="break-words leading-relaxed">{d.objective}</p></Section>
+      <Section title="// experience" color="#059669"><ExperienceList d={d} /></Section>
+      <Section title="// stack" color="#059669"><SkillPills skills={d.skills} /></Section>
+      <Section title="// education" color="#059669"><EducationList d={d} /></Section>
     </div>
   );
 }

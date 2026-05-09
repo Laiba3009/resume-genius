@@ -10,7 +10,7 @@ interface Props {
 
 export function TemplateGallery({ value, onChange }: Props) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {TEMPLATES.map((t) => {
         const active = value === t.id;
         return (
@@ -18,17 +18,17 @@ export function TemplateGallery({ value, onChange }: Props) {
             key={t.id}
             onClick={() => onChange(t.id)}
             className={cn(
-              "group relative rounded-xl border-2 overflow-hidden text-left transition-all bg-white",
+              "group relative overflow-hidden rounded-xl border-2 bg-white text-left transition-all duration-300",
               "hover:-translate-y-1 hover:shadow-elegant",
               active ? "border-brand shadow-elegant" : "border-border hover:border-brand/50"
             )}
           >
-            <div className="aspect-[4/5] overflow-hidden bg-neutral-100 relative">
+            <div className="relative aspect-[5/6] overflow-hidden bg-neutral-100">
               <div
                 className="absolute top-0 left-1/2"
                 style={{
                   width: "794px",
-                  transform: "translateX(-50%) scale(0.26)",
+                  transform: "translateX(-50%) scale(0.23)",
                   transformOrigin: "top center",
                   pointerEvents: "none",
                 }}
@@ -37,7 +37,7 @@ export function TemplateGallery({ value, onChange }: Props) {
               </div>
               <div className="absolute inset-0 ring-1 ring-inset ring-black/5 group-hover:ring-brand/30 transition" />
             </div>
-            <div className="p-3 flex items-center justify-between bg-white border-t">
+            <div className="flex items-center justify-between border-t bg-white p-3">
               <div>
                 <div className="font-semibold text-sm">{t.name}</div>
                 <div className="text-[11px] text-muted-foreground">{t.desc}</div>
