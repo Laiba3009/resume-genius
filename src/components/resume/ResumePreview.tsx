@@ -112,7 +112,7 @@ function SkillPills({ skills, dark = false }: { skills: string[]; dark?: boolean
           key={s}
           className={cn(
             "max-w-full break-words rounded-full px-2.5 py-1 text-[10px] font-medium leading-relaxed",
-            dark ? "bg-white/15 text-white" : "bg-slate-100 text-slate-700",
+            dark ? "bg-slate-700 text-white" : "bg-slate-100 text-slate-700",
           )}
         >
           {s}
@@ -175,8 +175,8 @@ function CreativeTpl({ d }: { d: ResumeData }) {
           <Avatar src={d.photo} size={88} />
           <div className="min-w-0 flex-1 space-y-2 break-words">
             <h1 className="text-3xl font-bold leading-tight">{d.fullName}</h1>
-            <p className="leading-relaxed text-white/90">{d.title}</p>
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs leading-relaxed text-white/80">
+            <p className="leading-relaxed text-white">{d.title}</p>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs leading-relaxed text-white">
               {contactItems(d).map((item) => <span key={item}>{item}</span>)}
             </div>
           </div>
@@ -249,10 +249,10 @@ function SidebarTpl({ d }: { d: ResumeData }) {
         <Avatar src={d.photo} size={110} />
         <div className="space-y-1 break-words">
           <h1 className="text-xl font-bold leading-tight">{d.fullName}</h1>
-          <p className="text-xs leading-relaxed text-white/80">{d.title}</p>
+          <p className="text-xs leading-relaxed text-white">{d.title}</p>
         </div>
         <Section title="Contact" color="#ffffff">
-          <div className="space-y-1.5 break-words text-xs leading-relaxed text-white/90">
+          <div className="space-y-1.5 break-words text-xs leading-relaxed text-white">
             {contactItems(d).map((item) => <div key={item}>{item}</div>)}
             {d.status && <div>{d.status}</div>}
           </div>
