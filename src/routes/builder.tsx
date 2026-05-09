@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Download, FileText, ArrowLeft, LayoutTemplate } from "lucide-react";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { toPng } from "html-to-image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,6 +38,7 @@ function Builder() {
   const [data, setData] = useState<ResumeData>(defaultResume);
   const [template, setTemplate] = useState<TemplateId>("modern");
   const [loaded, setLoaded] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   // Load
@@ -66,86 +67,50 @@ function Builder() {
   }, [data, template, loaded]);
 
   const downloadPDF = async () => {
-    if (!previewRef.current) return;
+    if (!previewRef.current || exporting) return;
+    setExporting(true);
     toast.loading("Generating PDF…", { id: "pdf" });
     try {
-      // --- oklch -> rgb conversion (html2canvas can't parse oklch) ---
-      const oklchToRgb = (L: number, C: number, h: number, alpha = 1) => {
-        const hr = (h * Math.PI) / 180;
-        const a = Math.cos(hr) * C;
-        const b = Math.sin(hr) * C;
-        const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
-        const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
-        const s_ = L - 0.0894841775 * a - 1.291485548 * b;
-        const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
-        let r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
-        let g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
-        let bl = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
-        const toSrgb = (v: number) => {
-          v = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
-          return Math.max(0, Math.min(255, Math.round(v * 255)));
-        };
-        return `rgba(${toSrgb(r)}, ${toSrgb(g)}, ${toSrgb(bl)}, ${alpha})`;
-      };
-      const replaceOklch = (str: string) =>
-        str.replace(/oklch\(\s*([0-9.%]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.%]+))?\s*\)/gi,
-          (_m, L, C, h, A) => {
-            const Ln = L.endsWith("%") ? parseFloat(L) / 100 : parseFloat(L);
-            const An = A ? (A.endsWith("%") ? parseFloat(A) / 100 : parseFloat(A)) : 1;
-            return oklchToRgb(Ln, parseFloat(C), parseFloat(h), An);
-          });
-
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        useCORS: true,
+      await document.fonts?.ready;
+      const node = previewRef.current;
+      const width = node.scrollWidth || 794;
+      const height = Math.max(node.scrollHeight, 1123);
+      const dataUrl = await toPng(node, {
+        cacheBust: true,
+        pixelRatio: 2,
+        width,
+        height,
         backgroundColor: "#ffffff",
-        onclone: (doc) => {
-          // 1) Sanitize all <style> tags
-          doc.querySelectorAll("style").forEach((s) => {
-            if (s.textContent && s.textContent.includes("oklch")) {
-              s.textContent = replaceOklch(s.textContent);
-            }
-          });
-          // 2) Sanitize inline styles on every element
-          const props = [
-            "color","background-color","border-top-color","border-right-color",
-            "border-bottom-color","border-left-color","outline-color","fill","stroke",
-            "text-decoration-color","caret-color","column-rule-color","background-image",
-          ];
-          doc.querySelectorAll<HTMLElement>("*").forEach((el) => {
-            const cs = doc.defaultView!.getComputedStyle(el);
-            props.forEach((p) => {
-              const v = cs.getPropertyValue(p);
-              if (v && v.includes("oklch")) {
-                el.style.setProperty(p, replaceOklch(v));
-              }
-            });
-            if (el.getAttribute("style")?.includes("oklch")) {
-              el.setAttribute("style", replaceOklch(el.getAttribute("style")!));
-            }
-          });
+        style: {
+          margin: "0",
+          transform: "none",
+          width: `${width}px`,
+          minHeight: `${height}px`,
+          overflow: "visible",
         },
       });
-      const img = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({ unit: "pt", format: "a4" });
+      const pdf = new jsPDF({ unit: "pt", format: "a4", compress: true });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
-      const ratio = canvas.height / canvas.width;
-      const imgH = pageW * ratio;
+      const imgH = pageW * (height / width);
       let y = 0;
       let remaining = imgH;
-      pdf.addImage(img, "PNG", 0, 0, pageW, imgH);
+      pdf.addImage(dataUrl, "PNG", 0, 0, pageW, imgH, undefined, "FAST");
       remaining -= pageH;
       while (remaining > 0) {
         pdf.addPage();
         y -= pageH;
-        pdf.addImage(img, "PNG", 0, y, pageW, imgH);
+        pdf.addImage(dataUrl, "PNG", 0, y, pageW, imgH, undefined, "FAST");
         remaining -= pageH;
       }
-      pdf.save(`${data.fullName || "resume"}.pdf`);
+      const fileName = (data.fullName || "resume").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "resume";
+      pdf.save(`${fileName}.pdf`);
       toast.success("Downloaded", { id: "pdf" });
-    } catch (e: any) {
-      toast.error(e.message || "Failed", { id: "pdf" });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to export PDF";
+      toast.error(message, { id: "pdf" });
+    } finally {
+      setExporting(false);
     }
   };
 
