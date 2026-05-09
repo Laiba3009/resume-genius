@@ -276,7 +276,9 @@ function CompactTpl({ d }: { d: ResumeData }) {
           <h1 className="text-2xl font-bold leading-tight">{d.fullName}</h1>
           <p className="text-xs leading-relaxed text-slate-600">{d.title}</p>
         </div>
-        <div className="max-w-[260px] break-words text-right text-xs leading-relaxed text-slate-600">{contactItems(d).join("\n")}</div>
+        <div className="max-w-[260px] space-y-1 break-words text-right text-xs leading-relaxed text-slate-600">
+          {contactItems(d).map((item) => <div key={item}>{item}</div>)}
+        </div>
       </header>
       <Section title="Summary"><p className="break-words leading-relaxed">{d.objective}</p></Section>
       <Section title="Experience"><ExperienceList d={d} compact /></Section>
