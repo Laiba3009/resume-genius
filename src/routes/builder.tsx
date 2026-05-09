@@ -116,28 +116,32 @@ function Builder() {
 
   return (
     <div className="min-h-screen bg-gradient-soft">
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50 no-print">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/85 backdrop-blur-xl no-print">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2 font-display font-bold">
             <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
               <FileText className="size-4 text-white" />
             </div>
             <span className="hidden sm:inline">Resumely</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button asChild variant="ghost" size="sm"><Link to="/"><ArrowLeft className="size-4 mr-1" /> Home</Link></Button>
-            <Button onClick={downloadPDF} className="bg-gradient-brand text-brand-foreground hover:opacity-90">
-              <Download className="size-4 mr-2" /> Download PDF
+            <Button
+              onClick={downloadPDF}
+              disabled={exporting}
+              className="rounded-xl bg-gradient-brand px-6 py-3 text-brand-foreground shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              <Download className="size-4 mr-2" /> {exporting ? "Exporting…" : "Download PDF"}
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr] gap-6">
+      <main className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(360px,430px)_minmax(0,1fr)] lg:gap-12">
         {/* Left: form / templates */}
-        <div className="space-y-4 no-print">
+        <div className="space-y-5 no-print lg:sticky lg:top-28 lg:self-start">
           <Tabs defaultValue="content">
-            <TabsList className="w-full grid grid-cols-2">
+            <TabsList className="grid h-11 w-full grid-cols-2 rounded-xl">
               <TabsTrigger value="content"><FileText className="size-4 mr-2" /> Content</TabsTrigger>
               <TabsTrigger value="templates"><LayoutTemplate className="size-4 mr-2" /> Templates</TabsTrigger>
             </TabsList>
@@ -151,8 +155,8 @@ function Builder() {
         </div>
 
         {/* Right: preview */}
-        <div className="bg-muted/40 rounded-2xl p-4 sm:p-8 overflow-auto">
-          <div className="origin-top mx-auto" style={{ transform: "scale(var(--preview-scale, 0.85))", transformOrigin: "top center" }}>
+        <div className="flex justify-center overflow-auto rounded-3xl bg-white/70 p-4 shadow-card ring-1 ring-border/60 sm:p-8 lg:p-10">
+          <div className="origin-top" style={{ transform: "scale(0.92)", transformOrigin: "top center" }}>
             <ResumePreview ref={previewRef} data={data} template={template} />
           </div>
         </div>
