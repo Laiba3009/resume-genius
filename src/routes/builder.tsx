@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Download, FileText, ArrowLeft, LayoutTemplate } from "lucide-react";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import { toPng } from "html-to-image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
