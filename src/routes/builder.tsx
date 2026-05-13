@@ -122,7 +122,10 @@ function Builder() {
             <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
               <FileText className="size-4 text-white" />
             </div>
-            <span className="hidden sm:inline">Resumely</span>
+            <span className="hidden sm:flex flex-col leading-none">
+              <span>Resumely</span>
+              <span className="text-[9px] font-normal tracking-wide text-muted-foreground">by Laiba Jaweed</span>
+            </span>
           </Link>
           <div className="flex items-center gap-3">
             <Button asChild variant="ghost" size="sm"><Link to="/"><ArrowLeft className="size-4 mr-1" /> Home</Link></Button>
