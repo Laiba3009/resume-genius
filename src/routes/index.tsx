@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Download, Layout, Zap, Shield, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TEMPLATES } from "@/lib/resume-types";
+import { TEMPLATES, defaultResume } from "@/lib/resume-types";
+import { ResumePreview } from "@/components/resume/ResumePreview";
 
 export const Route = createFileRoute("/")({
   head: () => ({
