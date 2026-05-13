@@ -143,19 +143,6 @@ function Features() {
   );
 }
 
-const TEMPLATE_IMAGES: Record<string, string> = {
-  modern: "/templates/template-modern.png",
-  minimal: "/templates/template-minimal.png",
-  creative: "/templates/template-creative.png",
-  corporate: "/templates/template-corporate.png",
-  ats: "/templates/template-dark.png",
-  elegant: "/templates/template-elegant.png",
-  sidebar: "/templates/template-sidebar.png",
-  compact: "/templates/template-compact.png",
-  executive: "/templates/template-executive.png",
-  techie: "/templates/template-tech.png",
-};
-
 function TemplatesShowcase() {
   return (
     <section id="templates" className="max-w-7xl mx-auto px-6 py-24">
