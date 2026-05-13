@@ -173,7 +173,19 @@ function Builder() {
       <main className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(360px,430px)_minmax(0,1fr)] lg:gap-12">
         {/* Left: form / templates */}
         <div className="space-y-5 no-print lg:sticky lg:top-28 lg:self-start">
-          <Tabs defaultValue="content">
+          <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/60 bg-white p-3 shadow-card">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="inline-flex size-6 items-center justify-center rounded-md bg-gradient-brand text-[10px] font-bold text-brand-foreground shrink-0">T</span>
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">Active template</div>
+                <div className="text-sm font-semibold truncate">{TEMPLATES.find((t) => t.id === template)?.name ?? template}</div>
+              </div>
+            </div>
+            <Button size="sm" variant="outline" className="rounded-lg" onClick={() => setTab("templates")}>
+              <LayoutTemplate className="size-3.5 mr-1.5" /> Change
+            </Button>
+          </div>
+          <Tabs value={tab} onValueChange={(v) => setTab(v as "content" | "templates") }>
             <TabsList className="grid h-11 w-full grid-cols-2 rounded-xl">
               <TabsTrigger value="content"><FileText className="size-4 mr-2" /> Content</TabsTrigger>
               <TabsTrigger value="templates"><LayoutTemplate className="size-4 mr-2" /> Templates</TabsTrigger>
@@ -182,14 +194,14 @@ function Builder() {
               <ResumeForm data={data} onChange={setData} />
             </TabsContent>
             <TabsContent value="templates" className="mt-4">
-              <TemplateGallery value={template} onChange={setTemplate} />
+              <TemplateGallery value={template} onChange={(id) => { setTemplate(id); setTab("content"); }} />
             </TabsContent>
           </Tabs>
         </div>
 
         {/* Right: preview */}
-        <div className="flex justify-center overflow-auto rounded-3xl bg-white/70 p-4 shadow-card ring-1 ring-border/60 sm:p-8 lg:p-10">
-          <div className="origin-top" style={{ transform: "scale(0.92)", transformOrigin: "top center" }}>
+        <div className="flex justify-center overflow-auto rounded-3xl bg-white/70 p-4 shadow-card ring-1 ring-border/60 sm:p-8 lg:p-10 animate-in fade-in duration-500">
+          <div key={template} className="origin-top animate-in fade-in zoom-in-95 duration-300" style={{ transform: "scale(0.92)", transformOrigin: "top center" }}>
             <ResumePreview ref={previewRef} data={data} template={template} />
           </div>
         </div>
