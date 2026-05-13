@@ -139,28 +139,67 @@ function Features() {
   );
 }
 
+const TEMPLATE_IMAGES: Record<string, string> = {
+  modern: "/templates/template-modern.png",
+  minimal: "/templates/template-minimal.png",
+  creative: "/templates/template-creative.png",
+  corporate: "/templates/template-corporate.png",
+  ats: "/templates/template-dark.png",
+  elegant: "/templates/template-elegant.png",
+  sidebar: "/templates/template-sidebar.png",
+  compact: "/templates/template-compact.png",
+  executive: "/templates/template-executive.png",
+  techie: "/templates/template-tech.png",
+};
+
 function TemplatesShowcase() {
   return (
-    <section id="templates" className="max-w-6xl mx-auto px-6 py-24">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold">10 templates. One you.</h2>
-        <p className="mt-3 text-muted-foreground">Switch designs in a click — your content stays untouched.</p>
+    <section id="templates" className="max-w-7xl mx-auto px-6 py-24">
+      <div className="text-center mb-14">
+        <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-4">
+          <Layout className="size-3 text-brand" /> 10 premium designs
+        </div>
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Pick a template you'll be proud of.</h2>
+        <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Every design is hand-tuned, ATS-friendly, and ready to export. Swap any time — your content stays put.</p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
         {TEMPLATES.map((t, i) => (
           <motion.div
             key={t.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.05 }}
-            className="aspect-[3/4] rounded-xl border bg-card shadow-card p-3 hover:shadow-elegant hover:-translate-y-1 transition"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: (i % 3) * 0.08, duration: 0.5 }}
+            className="group"
           >
-            <div className="size-full rounded-lg bg-muted relative overflow-hidden">
-              <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/70 to-transparent text-white text-xs font-medium">
-                {t.name}
+            <Link
+              to="/builder"
+              className="block rounded-2xl border border-border/70 bg-card overflow-hidden shadow-card hover:shadow-elegant hover:-translate-y-1.5 hover:border-brand/40 transition-all duration-300"
+            >
+              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
+                <img
+                  src={TEMPLATE_IMAGES[t.id]}
+                  alt={`${t.name} resume template preview`}
+                  width={768}
+                  height={1024}
+                  loading="lazy"
+                  className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white text-neutral-900 shadow">
+                    Use this template <ArrowRight className="size-3" />
+                  </span>
+                </div>
               </div>
-            </div>
+              <div className="p-5 border-t border-border/60">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-semibold text-base">{t.name}</h3>
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Free</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{t.desc}</p>
+              </div>
+            </Link>
           </motion.div>
         ))}
       </div>
