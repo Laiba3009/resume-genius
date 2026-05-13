@@ -226,10 +226,15 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/50 py-8">
-      <div className="max-w-6xl mx-auto px-6 text-sm text-muted-foreground flex justify-between flex-wrap gap-2">
-        <div>© {new Date().getFullYear()} Resumely. Built with love.</div>
-        <div>A modern resume builder.</div>
+    <footer className="border-t border-border/50 py-10">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="size-6 rounded-md bg-gradient-brand flex items-center justify-center">
+            <FileText className="size-3 text-white" />
+          </div>
+          <span>© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — Developed by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
+        </div>
+        <div className="text-xs">A modern, free resume builder.</div>
       </div>
     </footer>
   );
