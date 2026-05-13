@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Download, Layout, Zap, Shield, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TEMPLATES } from "@/lib/resume-types";
+import { TEMPLATES, defaultResume } from "@/lib/resume-types";
+import { ResumePreview } from "@/components/resume/ResumePreview";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -142,19 +143,6 @@ function Features() {
   );
 }
 
-const TEMPLATE_IMAGES: Record<string, string> = {
-  modern: "/templates/template-modern.png",
-  minimal: "/templates/template-minimal.png",
-  creative: "/templates/template-creative.png",
-  corporate: "/templates/template-corporate.png",
-  ats: "/templates/template-dark.png",
-  elegant: "/templates/template-elegant.png",
-  sidebar: "/templates/template-sidebar.png",
-  compact: "/templates/template-compact.png",
-  executive: "/templates/template-executive.png",
-  techie: "/templates/template-tech.png",
-};
-
 function TemplatesShowcase() {
   return (
     <section id="templates" className="max-w-7xl mx-auto px-6 py-24">
@@ -181,14 +169,17 @@ function TemplatesShowcase() {
               className="block rounded-2xl border border-border/70 bg-card overflow-hidden shadow-card hover:shadow-elegant hover:-translate-y-1.5 hover:border-brand/40 transition-all duration-300"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
-                <img
-                  src={TEMPLATE_IMAGES[t.id]}
-                  alt={`${t.name} resume template preview`}
-                  width={768}
-                  height={1024}
-                  loading="lazy"
-                  className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-                />
+                <div
+                  className="absolute top-0 left-1/2 pointer-events-none"
+                  style={{
+                    width: "794px",
+                    transform: "translateX(-50%) scale(0.42)",
+                    transformOrigin: "top center",
+                  }}
+                >
+                  <ResumePreview data={defaultResume} template={t.id} />
+                </div>
+                <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white text-neutral-900 shadow">
