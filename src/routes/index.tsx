@@ -37,7 +37,10 @@ function Nav() {
           <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
             <FileText className="size-4 text-white" />
           </div>
-          Resumely
+          <span className="flex flex-col leading-none">
+            <span>Resumely</span>
+            <span className="text-[9px] font-normal tracking-wide text-muted-foreground hidden sm:inline">by Laiba Jaweed</span>
+          </span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm">
           <a href="#features" className="text-muted-foreground hover:text-foreground transition">Features</a>
