@@ -9,10 +9,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResumeForm } from "@/components/resume/ResumeForm";
 import { ResumePreview } from "@/components/resume/ResumePreview";
 import { TemplateGallery } from "@/components/resume/TemplateGallery";
-import { defaultResume, type ResumeData, type TemplateId } from "@/lib/resume-types";
+import { defaultResume, TEMPLATES, type ResumeData, type TemplateId } from "@/lib/resume-types";
 import { supabase } from "@/integrations/supabase/client";
 
+const TEMPLATE_IDS = TEMPLATES.map((t) => t.id) as readonly TemplateId[];
+const isTemplateId = (v: unknown): v is TemplateId =>
+  typeof v === "string" && (TEMPLATE_IDS as readonly string[]).includes(v);
+
 export const Route = createFileRoute("/builder")({
+  validateSearch: (search: Record<string, unknown>): { template?: TemplateId } => ({
+    template: isTemplateId(search.template) ? search.template : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Resume Builder — Resumely" },
