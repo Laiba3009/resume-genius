@@ -1,6 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Download, Layout, Zap, Shield, FileText } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Download,
+  Layout,
+  Zap,
+  Shield,
+  FileText,
+  Github,
+  Linkedin,
+  Instagram,
+  Twitter
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TEMPLATES, defaultResume } from "@/lib/resume-types";
 import { ResumePreview } from "@/components/resume/ResumePreview";
@@ -48,6 +60,43 @@ function Nav() {
           <a href="#templates" className="text-muted-foreground hover:text-foreground transition">Templates</a>
           <Link to="/builder" className="text-muted-foreground hover:text-foreground transition">Builder</Link>
         </nav>
+        <div className="hidden md:flex items-center gap-3 ml-4">
+  <a
+    href="https://github.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="text-muted-foreground hover:text-foreground transition"
+  >
+    <Github className="size-4" />
+  </a>
+
+  <a
+    href="https://linkedin.com/in/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="text-muted-foreground hover:text-blue-500 transition"
+  >
+    <Linkedin className="size-4" />
+  </a>
+
+  <a
+    href="https://instagram.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="text-muted-foreground hover:text-pink-500 transition"
+  >
+    <Instagram className="size-4" />
+  </a>
+
+  <a
+    href="https://twitter.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="text-muted-foreground hover:text-sky-500 transition"
+  >
+    <Twitter className="size-4" />
+  </a>
+</div>
         <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground hover:opacity-90">
           <Link to="/builder">Start free <ArrowRight className="size-4 ml-1" /></Link>
         </Button>
@@ -227,6 +276,43 @@ function Footer() {
           <span>© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — Developed by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
         </div>
         <div className="text-xs">A modern, free resume builder.</div>
+        <div className="flex items-center gap-4">
+  <a
+    href="https://github.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="hover:text-foreground transition"
+  >
+    <Github className="size-4" />
+  </a>
+
+  <a
+    href="https://linkedin.com/in/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="hover:text-blue-500 transition"
+  >
+    <Linkedin className="size-4" />
+  </a>
+
+  <a
+    href="https://instagram.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="hover:text-pink-500 transition"
+  >
+    <Instagram className="size-4" />
+  </a>
+
+  <a
+    href="https://twitter.com/YOUR_USERNAME"
+    target="_blank"
+    rel="noreferrer"
+    className="hover:text-sky-500 transition"
+  >
+    <Twitter className="size-4" />
+  </a>
+</div>
       </div>
     </footer>
   );
