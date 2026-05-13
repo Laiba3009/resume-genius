@@ -50,6 +50,7 @@ function Builder() {
   const [loaded, setLoaded] = useState(false);
   const [exporting, setExporting] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const [tab, setTab] = useState<"content" | "templates">("content");
 
   const setTemplate = (id: TemplateId) => {
     setTemplateState(id);
