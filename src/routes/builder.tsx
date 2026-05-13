@@ -42,22 +42,45 @@ function getSessionId() {
 }
 
 function Builder() {
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const initialTemplate: TemplateId = search.template ?? "modern";
   const [data, setData] = useState<ResumeData>(defaultResume);
-  const [template, setTemplate] = useState<TemplateId>("modern");
+  const [template, setTemplateState] = useState<TemplateId>(initialTemplate);
   const [loaded, setLoaded] = useState(false);
   const [exporting, setExporting] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Load
+  const setTemplate = (id: TemplateId) => {
+    setTemplateState(id);
+    navigate({ search: { template: id }, replace: true });
+  };
+
+  // Scroll to top on mount for smooth entry from template card
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Sync from URL changes (e.g. user clicks another template link)
+  useEffect(() => {
+    if (search.template && search.template !== template) {
+      setTemplateState(search.template);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.template]);
+
+  // Load saved resume
   useEffect(() => {
     const sid = getSessionId();
     supabase.from("resumes").select("*").eq("session_id", sid).maybeSingle().then(({ data: row }) => {
       if (row) {
         setData(row.data as unknown as ResumeData);
-        setTemplate(row.template_id as TemplateId);
+        // URL template wins over saved template if explicitly provided
+        if (!search.template) setTemplateState(row.template_id as TemplateId);
       }
       setLoaded(true);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-save (debounced)
