@@ -182,14 +182,17 @@ function TemplatesShowcase() {
               className="block rounded-2xl border border-border/70 bg-card overflow-hidden shadow-card hover:shadow-elegant hover:-translate-y-1.5 hover:border-brand/40 transition-all duration-300"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
-                <img
-                  src={TEMPLATE_IMAGES[t.id]}
-                  alt={`${t.name} resume template preview`}
-                  width={768}
-                  height={1024}
-                  loading="lazy"
-                  className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-                />
+                <div
+                  className="absolute top-0 left-1/2 pointer-events-none"
+                  style={{
+                    width: "794px",
+                    transform: "translateX(-50%) scale(0.42)",
+                    transformOrigin: "top center",
+                  }}
+                >
+                  <ResumePreview data={defaultResume} template={t.id} />
+                </div>
+                <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white text-neutral-900 shadow">
