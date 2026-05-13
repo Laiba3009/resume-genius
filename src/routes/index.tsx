@@ -71,7 +71,7 @@ function Nav() {
   </a>
 
   <a
-    href="https://linkedin.com/in/YOUR_USERNAME"
+    href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android"
     target="_blank"
     rel="noreferrer"
     className="text-muted-foreground hover:text-blue-500 transition"
@@ -80,7 +80,7 @@ function Nav() {
   </a>
 
   <a
-    href="https://instagram.com/YOUR_USERNAME"
+    href="https://www.instagram.com/laibajaweed8?igsh=MWZuYmVrcHA2eHR6Ng=="
     target="_blank"
     rel="noreferrer"
     className="text-muted-foreground hover:text-pink-500 transition"
@@ -89,7 +89,7 @@ function Nav() {
   </a>
 
   <a
-    href="https://twitter.com/YOUR_USERNAME"
+    href="https://x.com/LaibaJaweed3009"
     target="_blank"
     rel="noreferrer"
     className="text-muted-foreground hover:text-sky-500 transition"
@@ -305,7 +305,7 @@ function Footer() {
   </a>
 
   <a
-    href="https://twitter.com/YOUR_USERNAME"
+    href="https://x.com/LaibaJaweed3009"
     target="_blank"
     rel="noreferrer"
     className="hover:text-sky-500 transition"
