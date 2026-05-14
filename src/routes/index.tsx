@@ -60,7 +60,7 @@ function Nav() {
           <a href="#templates" className="text-muted-foreground hover:text-foreground transition">Templates</a>
           <Link to="/builder" className="text-muted-foreground hover:text-foreground transition">Builder</Link>
         </nav>
-        <div className="hidden md:flex items-center gap-3 ml-4">
+        <div className="flex items-center gap-3 ml-2 sm:ml-4">
   <a
     href="https://github.com/YOUR_USERNAME"
     target="_blank"
