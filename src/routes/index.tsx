@@ -171,15 +171,15 @@ function Features() {
 
 function TemplatesShowcase() {
   return (
-    <section id="templates" className="max-w-7xl mx-auto px-6 py-24">
-      <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-4">
+    <section id="templates" className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="text-center mb-10 sm:mb-14">
+        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-4">
           <Layout className="size-3 text-brand" /> 10 premium designs
         </div>
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Pick a template you'll be proud of.</h2>
-        <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Every design is hand-tuned, ATS-friendly, and ready to export. Swap any time — your content stays put.</p>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Pick a template you'll be proud of.</h2>
+        <p className="mt-4 text-muted-foreground max-w-xl mx-auto px-2">Every design is hand-tuned, ATS-friendly, and ready to export. Swap any time — your content stays put.</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
         {TEMPLATES.map((t, i) => (
           <motion.div
             key={t.id}
