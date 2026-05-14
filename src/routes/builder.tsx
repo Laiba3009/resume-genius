@@ -201,9 +201,29 @@ function Builder() {
         </div>
 
         {/* Right: preview */}
-        <div className="flex justify-center overflow-auto rounded-3xl bg-white/70 p-4 shadow-card ring-1 ring-border/60 sm:p-8 lg:p-10 animate-in fade-in duration-500">
-          <div key={template} className="origin-top animate-in fade-in zoom-in-95 duration-300" style={{ transform: "scale(0.92)", transformOrigin: "top center" }}>
-            <ResumePreview ref={previewRef} data={data} template={template} />
+        <div className="rounded-3xl bg-white/70 p-3 shadow-card ring-1 ring-border/60 sm:p-6 lg:p-8 animate-in fade-in duration-500 overflow-hidden">
+          <div
+            className="relative w-full"
+            style={{ containerType: "inline-size" }}
+          >
+            <div
+              style={{
+                width: "100cqw",
+                height: "calc(100cqw * 1123 / 794)",
+                position: "relative",
+              }}
+            >
+              <div
+                key={template}
+                className="origin-top-left animate-in fade-in zoom-in-95 duration-300 absolute top-0 left-0"
+                style={{
+                  width: "794px",
+                  transform: "scale(calc(100cqw / 794px))",
+                }}
+              >
+                <ResumePreview ref={previewRef} data={data} template={template} />
+              </div>
+            </div>
           </div>
         </div>
       </main>
