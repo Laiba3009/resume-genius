@@ -229,11 +229,11 @@ function TemplatesShowcase() {
 
 function CTA() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-24">
-      <div className="rounded-3xl bg-gradient-brand p-12 text-center text-brand-foreground shadow-elegant">
-        <h2 className="text-4xl font-bold">Your next role is one resume away.</h2>
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="rounded-3xl bg-gradient-brand p-8 sm:p-12 text-center text-brand-foreground shadow-elegant">
+        <h2 className="text-3xl sm:text-4xl font-bold">Your next role is one resume away.</h2>
         <p className="mt-3 opacity-90">Start building — it's free, fast, and looks great.</p>
-        <Button asChild size="lg" variant="secondary" className="mt-8">
+        <Button asChild size="lg" variant="secondary" className="mt-8 w-full sm:w-auto">
           <Link to="/builder">Open the builder <ArrowRight className="size-4 ml-2" /></Link>
         </Button>
       </div>
