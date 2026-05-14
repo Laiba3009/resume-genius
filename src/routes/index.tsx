@@ -142,9 +142,9 @@ function Features() {
     { icon: Shield, title: "ATS Friendly", desc: "Layouts parsers love. Get past the bots, into the hands of recruiters." },
   ];
   return (
-    <section id="features" className="max-w-6xl mx-auto px-6 py-24">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold">Everything you need. Nothing you don't.</h2>
+    <section id="features" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="text-center mb-10 sm:mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold">Everything you need. Nothing you don't.</h2>
         <p className="mt-3 text-muted-foreground">Crafted for speed and clarity.</p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
