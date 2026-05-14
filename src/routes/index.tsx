@@ -80,7 +80,7 @@ function Nav() {
   </a>
 
   <a
-    href="https://www.instagram.com/laibajaweed8?igsh=MWZuYmVrcHA2eHR6Ng=="
+    href="https://www.instagram.com/laibajaweed8"
     target="_blank"
     rel="noreferrer"
     className="text-muted-foreground hover:text-pink-500 transition"
@@ -278,7 +278,7 @@ function Footer() {
         <div className="text-xs">A modern, free resume builder.</div>
         <div className="flex items-center gap-4">
   <a
-    href="https://github.com/YOUR_USERNAME"
+    href="https://github.com/laiba3009"
     target="_blank"
     rel="noreferrer"
     className="hover:text-foreground transition"
@@ -287,7 +287,7 @@ function Footer() {
   </a>
 
   <a
-    href="https://linkedin.com/in/YOUR_USERNAME"
+    href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android"
     target="_blank"
     rel="noreferrer"
     className="hover:text-blue-500 transition"
@@ -296,7 +296,7 @@ function Footer() {
   </a>
 
   <a
-    href="https://instagram.com/YOUR_USERNAME"
+    href="https://instagram.com/laibajaweed8"
     target="_blank"
     rel="noreferrer"
     className="hover:text-pink-500 transition"
