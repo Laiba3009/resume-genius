@@ -45,13 +45,13 @@ function Landing() {
 function Nav() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg">
-          <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <Link to="/" className="flex items-center gap-2 font-display font-bold text-base sm:text-lg min-w-0">
+          <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center shrink-0">
             <FileText className="size-4 text-white" />
           </div>
-          <span className="flex flex-col leading-none">
-            <span>Resumely</span>
+          <span className="flex flex-col leading-none min-w-0">
+            <span className="truncate">Resumely</span>
             <span className="text-[9px] font-normal tracking-wide text-muted-foreground hidden sm:inline">by Laiba Jaweed</span>
           </span>
         </Link>
@@ -60,44 +60,21 @@ function Nav() {
           <a href="#templates" className="text-muted-foreground hover:text-foreground transition">Templates</a>
           <Link to="/builder" className="text-muted-foreground hover:text-foreground transition">Builder</Link>
         </nav>
-        <div className="flex items-center gap-3 ml-2 sm:ml-4">
-  <a
-    href="https://github.com/YOUR_USERNAME"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-foreground transition"
-  >
-    <Github className="size-4" />
-  </a>
-
-  <a
-    href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-blue-500 transition"
-  >
-    <Linkedin className="size-4" />
-  </a>
-
-  <a
-    href="https://www.instagram.com/laibajaweed8"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-pink-500 transition"
-  >
-    <Instagram className="size-4" />
-  </a>
-
-  <a
-    href="https://x.com/LaibaJaweed3009"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-sky-500 transition"
-  >
-    <Twitter className="size-4" />
-  </a>
-</div>
-        <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground hover:opacity-90">
+        <div className="hidden md:flex items-center gap-3 ml-2">
+          <a href="https://github.com/laiba3009" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition">
+            <Github className="size-4" />
+          </a>
+          <a href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-blue-500 transition">
+            <Linkedin className="size-4" />
+          </a>
+          <a href="https://www.instagram.com/laibajaweed8" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-pink-500 transition">
+            <Instagram className="size-4" />
+          </a>
+          <a href="https://x.com/LaibaJaweed3009" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-sky-500 transition">
+            <Twitter className="size-4" />
+          </a>
+        </div>
+        <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shrink-0">
           <Link to="/builder">Start free <ArrowRight className="size-4 ml-1" /></Link>
         </Button>
       </div>
