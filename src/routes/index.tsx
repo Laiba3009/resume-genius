@@ -243,15 +243,15 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/50 py-10">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
+    <footer className="border-t border-border/50 py-8 sm:py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground text-center sm:text-left">
         <div className="flex items-center gap-2">
-          <div className="size-6 rounded-md bg-gradient-brand flex items-center justify-center">
+          <div className="size-6 rounded-md bg-gradient-brand flex items-center justify-center shrink-0">
             <FileText className="size-3 text-white" />
           </div>
-          <span>© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — Developed by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
+          <span className="text-xs sm:text-sm">© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
         </div>
-        <div className="text-xs">A modern, free resume builder.</div>
+        <div className="text-xs hidden md:block">A modern, free resume builder.</div>
         <div className="flex items-center gap-4">
   <a
     href="https://github.com/laiba3009"
