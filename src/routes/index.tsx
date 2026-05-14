@@ -45,13 +45,13 @@ function Landing() {
 function Nav() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/50">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg">
-          <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <Link to="/" className="flex items-center gap-2 font-display font-bold text-base sm:text-lg min-w-0">
+          <div className="size-8 rounded-lg bg-gradient-brand flex items-center justify-center shrink-0">
             <FileText className="size-4 text-white" />
           </div>
-          <span className="flex flex-col leading-none">
-            <span>Resumely</span>
+          <span className="flex flex-col leading-none min-w-0">
+            <span className="truncate">Resumely</span>
             <span className="text-[9px] font-normal tracking-wide text-muted-foreground hidden sm:inline">by Laiba Jaweed</span>
           </span>
         </Link>
@@ -60,44 +60,21 @@ function Nav() {
           <a href="#templates" className="text-muted-foreground hover:text-foreground transition">Templates</a>
           <Link to="/builder" className="text-muted-foreground hover:text-foreground transition">Builder</Link>
         </nav>
-        <div className="flex items-center gap-3 ml-2 sm:ml-4">
-  <a
-    href="https://github.com/YOUR_USERNAME"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-foreground transition"
-  >
-    <Github className="size-4" />
-  </a>
-
-  <a
-    href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-blue-500 transition"
-  >
-    <Linkedin className="size-4" />
-  </a>
-
-  <a
-    href="https://www.instagram.com/laibajaweed8"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-pink-500 transition"
-  >
-    <Instagram className="size-4" />
-  </a>
-
-  <a
-    href="https://x.com/LaibaJaweed3009"
-    target="_blank"
-    rel="noreferrer"
-    className="text-muted-foreground hover:text-sky-500 transition"
-  >
-    <Twitter className="size-4" />
-  </a>
-</div>
-        <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground hover:opacity-90">
+        <div className="hidden md:flex items-center gap-3 ml-2">
+          <a href="https://github.com/laiba3009" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition">
+            <Github className="size-4" />
+          </a>
+          <a href="https://www.linkedin.com/in/laiba-jaweed-ab74a7346?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-blue-500 transition">
+            <Linkedin className="size-4" />
+          </a>
+          <a href="https://www.instagram.com/laibajaweed8" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-pink-500 transition">
+            <Instagram className="size-4" />
+          </a>
+          <a href="https://x.com/LaibaJaweed3009" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-sky-500 transition">
+            <Twitter className="size-4" />
+          </a>
+        </div>
+        <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shrink-0">
           <Link to="/builder">Start free <ArrowRight className="size-4 ml-1" /></Link>
         </Button>
       </div>
@@ -107,22 +84,22 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 text-center">
+    <section className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-16 sm:pb-24 text-center">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-6">
+        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-5 sm:mb-6">
           <Sparkles className="size-3 text-brand" /> 100% free · No signup required
         </div>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl mx-auto leading-[1.05]">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight max-w-4xl mx-auto leading-[1.05]">
           Resumes that <span className="text-gradient">actually get</span> read.
         </h1>
-        <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
           Pick from 10 hand-crafted templates, fill in the form, watch it update live, and export a pixel-perfect PDF in seconds.
         </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shadow-elegant">
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap justify-center gap-3">
+          <Button asChild size="lg" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shadow-elegant w-full sm:w-auto">
             <Link to="/builder">Build my resume <ArrowRight className="size-4 ml-2" /></Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
             <a href="#templates">Browse templates</a>
           </Button>
         </div>
@@ -165,9 +142,9 @@ function Features() {
     { icon: Shield, title: "ATS Friendly", desc: "Layouts parsers love. Get past the bots, into the hands of recruiters." },
   ];
   return (
-    <section id="features" className="max-w-6xl mx-auto px-6 py-24">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold">Everything you need. Nothing you don't.</h2>
+    <section id="features" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="text-center mb-10 sm:mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold">Everything you need. Nothing you don't.</h2>
         <p className="mt-3 text-muted-foreground">Crafted for speed and clarity.</p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -194,15 +171,15 @@ function Features() {
 
 function TemplatesShowcase() {
   return (
-    <section id="templates" className="max-w-7xl mx-auto px-6 py-24">
-      <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-4">
+    <section id="templates" className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="text-center mb-10 sm:mb-14">
+        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-4">
           <Layout className="size-3 text-brand" /> 10 premium designs
         </div>
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Pick a template you'll be proud of.</h2>
-        <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Every design is hand-tuned, ATS-friendly, and ready to export. Swap any time — your content stays put.</p>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Pick a template you'll be proud of.</h2>
+        <p className="mt-4 text-muted-foreground max-w-xl mx-auto px-2">Every design is hand-tuned, ATS-friendly, and ready to export. Swap any time — your content stays put.</p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
         {TEMPLATES.map((t, i) => (
           <motion.div
             key={t.id}
@@ -252,11 +229,11 @@ function TemplatesShowcase() {
 
 function CTA() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-24">
-      <div className="rounded-3xl bg-gradient-brand p-12 text-center text-brand-foreground shadow-elegant">
-        <h2 className="text-4xl font-bold">Your next role is one resume away.</h2>
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div className="rounded-3xl bg-gradient-brand p-8 sm:p-12 text-center text-brand-foreground shadow-elegant">
+        <h2 className="text-3xl sm:text-4xl font-bold">Your next role is one resume away.</h2>
         <p className="mt-3 opacity-90">Start building — it's free, fast, and looks great.</p>
-        <Button asChild size="lg" variant="secondary" className="mt-8">
+        <Button asChild size="lg" variant="secondary" className="mt-8 w-full sm:w-auto">
           <Link to="/builder">Open the builder <ArrowRight className="size-4 ml-2" /></Link>
         </Button>
       </div>
@@ -266,15 +243,15 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/50 py-10">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
+    <footer className="border-t border-border/50 py-8 sm:py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground text-center sm:text-left">
         <div className="flex items-center gap-2">
-          <div className="size-6 rounded-md bg-gradient-brand flex items-center justify-center">
+          <div className="size-6 rounded-md bg-gradient-brand flex items-center justify-center shrink-0">
             <FileText className="size-3 text-white" />
           </div>
-          <span>© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — Developed by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
+          <span className="text-xs sm:text-sm">© {new Date().getFullYear()} <span className="font-semibold text-foreground">Resumely</span> — by <span className="text-foreground font-medium">Laiba Jaweed</span></span>
         </div>
-        <div className="text-xs">A modern, free resume builder.</div>
+        <div className="text-xs hidden md:block">A modern, free resume builder.</div>
         <div className="flex items-center gap-4">
   <a
     href="https://github.com/laiba3009"
