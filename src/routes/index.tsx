@@ -217,13 +217,12 @@ function TemplatesShowcase() {
               search={{ template: t.id }}
               className="block rounded-2xl border border-border/70 bg-card overflow-hidden shadow-card hover:shadow-elegant hover:-translate-y-1.5 hover:border-brand/40 transition-all duration-300"
             >
-              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100">
+              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100" style={{ containerType: "inline-size" }}>
                 <div
-                  className="absolute top-0 left-1/2 pointer-events-none"
+                  className="absolute top-0 left-0 pointer-events-none origin-top-left"
                   style={{
                     width: "794px",
-                    transform: "translateX(-50%) scale(0.42)",
-                    transformOrigin: "top center",
+                    transform: "scale(calc(100cqw / 794))",
                   }}
                 >
                   <ResumePreview data={defaultResume} template={t.id} />
