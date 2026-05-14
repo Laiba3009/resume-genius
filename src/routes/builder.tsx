@@ -203,19 +203,26 @@ function Builder() {
         {/* Right: preview */}
         <div className="rounded-3xl bg-white/70 p-3 shadow-card ring-1 ring-border/60 sm:p-6 lg:p-8 animate-in fade-in duration-500 overflow-hidden">
           <div
-            className="relative mx-auto"
-            style={{ containerType: "inline-size", width: "100%" }}
+            className="relative w-full"
+            style={{ containerType: "inline-size" }}
           >
             <div
-              key={template}
-              className="origin-top-left animate-in fade-in zoom-in-95 duration-300"
               style={{
-                width: "794px",
-                transform: "scale(min(1, calc(100cqw / 794)))",
-                height: "calc(1123px * min(1, 100cqw / 794))",
+                width: "100cqw",
+                height: "calc(100cqw * 1123 / 794)",
+                position: "relative",
               }}
             >
-              <ResumePreview ref={previewRef} data={data} template={template} />
+              <div
+                key={template}
+                className="origin-top-left animate-in fade-in zoom-in-95 duration-300 absolute top-0 left-0"
+                style={{
+                  width: "794px",
+                  transform: "scale(calc(100cqw / 794px))",
+                }}
+              >
+                <ResumePreview ref={previewRef} data={data} template={template} />
+              </div>
             </div>
           </div>
         </div>
