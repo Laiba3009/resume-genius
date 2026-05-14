@@ -84,22 +84,22 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 text-center">
+    <section className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-16 sm:pb-24 text-center">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-6">
+        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-medium px-3 py-1 rounded-full border border-border bg-card mb-5 sm:mb-6">
           <Sparkles className="size-3 text-brand" /> 100% free · No signup required
         </div>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl mx-auto leading-[1.05]">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight max-w-4xl mx-auto leading-[1.05]">
           Resumes that <span className="text-gradient">actually get</span> read.
         </h1>
-        <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-5 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
           Pick from 10 hand-crafted templates, fill in the form, watch it update live, and export a pixel-perfect PDF in seconds.
         </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shadow-elegant">
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap justify-center gap-3">
+          <Button asChild size="lg" className="bg-gradient-brand text-brand-foreground hover:opacity-90 shadow-elegant w-full sm:w-auto">
             <Link to="/builder">Build my resume <ArrowRight className="size-4 ml-2" /></Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
             <a href="#templates">Browse templates</a>
           </Button>
         </div>
